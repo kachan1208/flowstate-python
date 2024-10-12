@@ -11,5 +11,12 @@ class CommitCommand(Command):
 
 class CommitableCommand(ABC):
     @abstractmethod
-    def CommitableStateCtx(self) -> StateCtx:
+    def commitableStateCtx(self) -> StateCtx:
         pass
+
+class CommitStateCtxCommand(Command):
+    def __init__(self, stateCtx: StateCtx):
+        self.stateCtx = stateCtx
+    
+    def commitableStateCtx(self) -> StateCtx:
+        return self.stateCtx

@@ -1,6 +1,3 @@
-from abc import ABC, abstractmethod
-
-class Command(ABC):
-    @abstractmethod
+class Command():
     def cmd(self):
         pass
