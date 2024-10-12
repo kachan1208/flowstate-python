@@ -10,9 +10,7 @@ class Flow(ABC):
     def execute(self, stateCtx: StateCtx, e: Engine) -> Command:
         pass
 
-class FlowFunc(Flow):
+def FlowFunc(func):
     def execute(self, stateCtx: StateCtx, e: Engine) -> Command:
-        try:
-            return self #todo: finish this
-        except Exception as e:
-            raise e
+        return func(self, stateCtx, e)
+    return execute

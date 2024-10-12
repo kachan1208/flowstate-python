@@ -1,0 +1,2 @@
+class ErrCommitConflict(Exception):
+    pass
