@@ -28,7 +28,10 @@ class State:
 
         return to
 
-    # def copyToCtx() TODO: impl
+    def copyToCtx(self, to: "StateCtx") -> "StateCtx":
+        self.copyTo(to.commited)
+        self.copyTo(to.current)
+        return to
 
     def setAnnotation(self, name: str, value: str):
         self.annotations[name] = value
@@ -42,7 +45,7 @@ class StateCtx:
         # noCopy doesn't exist in Python
         self.current: State
         self.commited: State
-        self.transitions: list[Transition] = []
+        self.transitions: list[Transition]
         self.e: Engine
 
     def copyTo(self, to: "StateCtx") -> "StateCtx":
@@ -70,9 +73,11 @@ class StateCtx:
     def deadline(self) -> tuple[datetime, bool]:
         return datetime.now(), False
 
+    # TODO: implement me
     def done(self) -> bool:
         return False
 
+    # TODO: implement me
     def err(self) -> Exception:
         return Exception("Not implemented")
 

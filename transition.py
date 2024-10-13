@@ -3,8 +3,8 @@ from flow import FlowId
 
 class Transition:
     def __init__(self) -> None:
-        self.fromId: FlowId = FlowId("")
-        self.toId: FlowId = FlowId("")
+        self.fromId: FlowId
+        self.toId: FlowId
         self.annotations: dict
 
     def setAnnotation(self, name: str, value: str):

@@ -65,7 +65,7 @@ class Engine:
             if cmd0.sync:
                 return
 
-            # todo: add asynio support
+            # TODO: add asynio support
             try:
                 self.execute(cmd0.stateCtx)
             except Exception as e:
@@ -87,12 +87,11 @@ class Engine:
         return cmd.flow
 
     def continueExecution(self, cmd: Command) -> StateCtx:
-        t = type(cmd)
-        if t == CommitComand:
+        if cmd is CommitComand:
             if len(cmd.commands) != 1:
                 raise Exception("commit command must have exactly one command")
             return self.continueExecution(cmd.commands[0])
-        elif t == ExecuteCommand:
+        elif cmd is ExecuteCommand:
             return cmd.stateCtx
         else:
-            raise Exception(f"unknown command 123: {t}")
+            raise Exception(f"unknown command 123: {type(cmd)}")

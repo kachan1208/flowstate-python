@@ -16,7 +16,7 @@ class Doer:
         pass
 
 
-# todo: rework once get used to decorators and understand the analogue in
+# TODO: rework once get used to decorators and understand the analogue in
 # python. go uses http.HandlerFunc as decoratorin this case we have
 # a DoerFunc type alias and few methods adds to it, but it's not implemented
 def DoerFunc(func):
