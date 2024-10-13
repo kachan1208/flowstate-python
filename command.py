@@ -1,3 +1,3 @@
-class Command():
+class Command:
     def cmd(self):
         pass
