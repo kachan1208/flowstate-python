@@ -12,7 +12,7 @@ class EndCommand(Command):
         return self.stateCtx
 
 
-class EndDoer(Doer):
+class DefaultEndDoer(Doer):
     def do(self, cmd: Command) -> None:
         if cmd is not EndCommand:
             raise ErrCommandNotSupported

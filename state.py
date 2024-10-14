@@ -4,14 +4,15 @@ from datetime import datetime
 
 
 StateAnnotation = "flowstate.state"
+StateId = str
 
 
 class State:
     def __init__(self) -> None:
         self.id: str = ""
         self.rev: int = 0
-        self.annotations: dict = {}
-        self.labels: dict = {}
+        self.annotations: dict[str, str]
+        self.labels: dict[str, str]
         self.commitedAtUnixMilli: int = 0
         self.transition: Transition = Transition()
 
@@ -92,3 +93,9 @@ class StateCtx:
 
     def value(self, key: str) -> any:
         return self.current.annotations[key]
+
+    def __copy__(self):
+        return None
+
+    def __deepcopy__(self):
+        return None
