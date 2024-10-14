@@ -3,6 +3,9 @@ from transition import Transition
 from datetime import datetime
 
 
+StateAnnotation = "flowstate.state"
+
+
 class State:
     def __init__(self) -> None:
         self.id: str = ""
@@ -41,12 +44,18 @@ class State:
 
 
 class StateCtx:
-    def __init__(self) -> None:
-        # noCopy doesn't exist in Python
-        self.current: State
-        self.commited: State
-        self.transitions: list[Transition]
-        self.e: Engine
+    current: State
+    commited: State
+    transitions: list[Transition]
+    e: Engine
+
+    def __init__(
+        self, current: State, commited: State, transitions: list[Transition], e: Engine
+    ) -> None:
+        self.current = current
+        self.commited = commited
+        self.transitions = transitions
+        self.e = e
 
     def copyTo(self, to: "StateCtx") -> "StateCtx":
         self.current.copyTo(to.current)

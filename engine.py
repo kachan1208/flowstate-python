@@ -9,6 +9,9 @@ from cmd_execute import ExecuteCommand
 from command import Command
 
 
+ErrFlowNotFound = Exception("flow not found")
+
+
 class Engine:
     def __init__(self, doer: Doer):
         self.d = doer

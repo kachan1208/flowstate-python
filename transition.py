@@ -2,10 +2,14 @@ from flow import FlowId
 
 
 class Transition:
-    def __init__(self) -> None:
-        self.fromId: FlowId
-        self.toId: FlowId
-        self.annotations: dict
+    fromId: FlowId
+    toId: FlowId
+    annotations: dict
+
+    def __init__(self, frowId: FlowId, toId: FlowId, annotations: dict) -> None:
+        self.fromId = frowId
+        self.toId = toId
+        self.annotations = annotations
 
     def setAnnotation(self, name: str, value: str):
         self.annotations[name] = value

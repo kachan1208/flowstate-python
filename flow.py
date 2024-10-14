@@ -1,4 +1,3 @@
-from abc import ABC, abstractmethod
 from command import Command
 from state import StateCtx
 from engine import Engine
@@ -7,14 +6,13 @@ from engine import Engine
 FlowId = str
 
 
-class Flow(ABC):
-    @abstractmethod
+class Flow:
     def execute(self, stateCtx: StateCtx, e: Engine) -> Command:
         pass
 
 
 def FlowFunc(func):
-    def execute(self, stateCtx: StateCtx, e: Engine) -> Command:
-        return func(self, stateCtx, e)
+    def execute(stateCtx: StateCtx, e: Engine) -> Command:
+        return func(stateCtx, e)
 
     return execute
