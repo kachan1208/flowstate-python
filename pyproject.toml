@@ -1,0 +1,16 @@
+[tool.poetry]
+name = "flowstate-python"
+version = "0.1.0"
+description = ""
+authors = ["Max Baginskiy <kachan1208@gmail.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.12"
+aiohttp = "^3.10.10"
+pytest = "^8.3.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
