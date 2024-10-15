@@ -1,0 +1,202 @@
+syntax = "proto3";
+
+package flowstate.v1;
+
+import "flowstate/v1/state.proto";
+
+message AnyCommand {
+  oneof command {
+    Transit transit = 1;
+    Pause pause = 2;
+    Resume resume = 3;
+    End end = 4;
+    Execute execute = 5;
+    Delay delay = 6;
+    Commit commit = 7;
+    Noop noop = 8;
+    Serialize serialize = 9;
+    Deserialize deserialize = 10;
+    StoreData store_data = 11;
+    GetData get_data = 12;
+    ReferenceData reference_data = 13;
+    DereferenceData dereference_data = 14;
+    Get get = 15;
+    CommitState commit_state = 16;
+  }
+}
+
+message AnyResult {
+  oneof result {
+    TransitResult transit = 1;
+    PauseResult pause = 2;
+    ResumeResult resume = 3;
+    EndResult end = 4;
+    ExecuteResult execute = 5;
+    DelayResult delay = 6;
+    CommitResult commit = 7;
+    NoopResult noop = 8;
+    SerializeResult serialize = 9;
+    DeserializeResult deserialize = 10;
+    StoreDataResult store_data = 11;
+    GetDataResult get_data = 12;
+    ReferenceDataResult reference_data = 13;
+    DereferenceDataResult dereference_data = 14;
+    GetResult get = 15;
+    CommitStateResult commit_state = 16;
+  }
+}
+
+message Transit {
+  StateRef state_ref = 1;
+  string flow_id = 2;
+}
+
+message TransitResult {
+  StateRef state_ref = 1;
+}
+
+message Pause {
+  StateRef state_ref = 1;
+  string flow_id = 2;
+}
+
+message PauseResult {
+  StateRef state_ref = 1;
+}
+
+message Resume {
+  StateRef state_ref = 1;
+}
+
+message ResumeResult {
+  StateRef state_ref = 1;
+}
+
+message End {
+  StateRef state_ref = 1;
+}
+
+message EndResult {
+  StateRef state_ref = 1;
+}
+
+message Execute {
+  StateRef state_ref = 1;
+}
+
+message ExecuteResult {
+  StateRef state_ref = 1;
+}
+
+message Delay {
+  StateRef state_ref = 1;
+  string duration = 2;
+  bool commit = 3;
+}
+
+message DelayResult {
+  StateRef state_ref = 1;
+  string duration = 2;
+  bool commit = 3;
+}
+
+message Commit {
+  repeated AnyCommand commands = 2;
+}
+
+message CommitResult {
+  repeated AnyResult results = 3;
+}
+
+message CommitState {
+  StateRef state_ref = 1;
+}
+
+message CommitStateResult {
+  StateRef state_ref = 1;
+}
+
+message Noop {
+  StateRef state_ref = 1;
+}
+
+message NoopResult {
+  StateRef state_ref = 1;
+}
+
+message Serialize {
+  StateRef serializable_state_ref = 1;
+  StateRef state_ref = 2;
+  string annotation = 3;
+}
+
+message SerializeResult {
+  StateRef serializable_state_ref = 1;
+  StateRef state_ref = 2;
+  string annotation = 3;
+}
+
+message Deserialize {
+  StateRef deserialized_state_ref = 1;
+  StateRef state_ref = 2;
+  string annotation = 3;
+}
+
+message DeserializeResult {
+  StateRef deserialized_state_ref = 1;
+  StateRef state_ref = 2;
+  string annotation = 3;
+}
+
+message ReferenceData {
+  StateRef state_ref = 1;
+  DataRef data_ref = 2;
+  string annotation = 3;
+}
+
+message DereferenceDataResult {
+  StateRef state_ref = 1;
+  DataRef data_ref = 2;
+  string annotation = 3;
+}
+
+message DereferenceData {
+  StateRef state_ref = 1;
+  DataRef data_ref = 2;
+  string annotation = 3;
+}
+
+message ReferenceDataResult {
+  StateRef state_ref = 1;
+  DataRef data_ref = 2;
+  string annotation = 3;
+}
+
+message GetData {
+  DataRef data_ref = 1;
+}
+
+message GetDataResult {
+  DataRef data_ref = 1;
+}
+
+message StoreData {
+  DataRef data_ref = 1;
+}
+
+message StoreDataResult {
+  DataRef data_ref = 1;
+}
+
+
+message Get {
+  string id = 1;
+  int64 rev = 2;
+  map<string, string> labels = 3;
+
+  StateRef state_ref = 4;
+}
+
+message GetResult {
+  StateRef state_ref = 4;
+}
