@@ -1,6 +1,6 @@
 from state import StateCtx, State, StateAnnotation
-from doer import Doer
-from command import Command, ErrCommandNotSupported
+from doer import Doer, ErrCommandNotSupported
+from command import Command
 from transition import Transition
 
 
@@ -29,7 +29,7 @@ class DefaultEndDoer(Doer):
 
 
 def Ended(state: State) -> bool:
-    return state.Transition.Annotations[StateAnnotation] == "ended"
+    return state.transition.annotations[StateAnnotation] == "ended"
 
 
 def End(stateCtx: StateCtx) -> EndCommand:

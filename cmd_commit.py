@@ -1,4 +1,3 @@
-from abc import ABC, abstractmethod
 from command import Command
 from state import StateCtx
 
@@ -8,8 +7,7 @@ class CommitCommand(Command):
         self.commands = cmds
 
 
-class CommitableCommand(ABC):
-    @abstractmethod
+class CommitableCommand():
     def commitableStateCtx(self) -> StateCtx:
         pass
 
