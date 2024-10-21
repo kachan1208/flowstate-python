@@ -34,5 +34,5 @@ class PauseCommand(Command):
         self.flowId = fId
         return self
 
-    def commitableStateCtx(self) -> StateCtx:
+    def committableStateCtx(self) -> StateCtx:
         return self.stateCtx

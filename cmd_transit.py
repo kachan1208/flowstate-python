@@ -12,7 +12,7 @@ class TransitCommand(Command):
         self.stateCtx = stateCtx
         self.flowId = fId
 
-    def commitableStateCtx(self) -> StateCtx:
+    def committableStateCtx(self) -> StateCtx:
         return self.stateCtx
 
 class DefaultTransitDoer(Doer):

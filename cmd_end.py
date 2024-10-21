@@ -8,7 +8,7 @@ class EndCommand(Command):
     def __init__(self, stateCtx: StateCtx) -> None:
         self.stateCtx = stateCtx
 
-    def commitableStateCtx(self) -> StateCtx:
+    def committableStateCtx(self) -> StateCtx:
         return self.stateCtx
 
 

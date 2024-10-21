@@ -7,8 +7,8 @@ class CommitCommand(Command):
         self.commands = cmds
 
 
-class CommitableCommand():
-    def commitableStateCtx(self) -> StateCtx:
+class CommittableCommand():
+    def committableStateCtx(self) -> StateCtx:
         pass
 
 
@@ -16,7 +16,7 @@ class CommitStateCtxCommand(Command):
     def __init__(self, stateCtx: StateCtx):
         self.stateCtx = stateCtx
 
-    def commitableStateCtx(self) -> StateCtx:
+    def committableStateCtx(self) -> StateCtx:
         return self.stateCtx
 
 
