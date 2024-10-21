@@ -6,6 +6,13 @@ from cmd_get_flow import GetFlow
 from errors import ErrCommitConflict
 from cmd_commit import CommitComand
 from cmd_execute import ExecuteCommand
+from cmd_resume import ResumeCommand
+from cmd_transit import TransitCommand
+from cmd_resume import ResumeCommand
+from cmd_pause import PauseCommand
+from cmd_delay import DelayCommand
+from cmd_end import EndCommand
+from cmd_noop import NoopCommand
 from command import Command
 
 
@@ -83,18 +90,30 @@ class Engine:
     def getFlow(self, stateCtx: StateCtx) -> Flow:
         cmd = GetFlow(stateCtx)
         try:
-            self.d.Do(cmd)
+            self.d.do(cmd)
         except Exception as e:
             raise e
 
         return cmd.flow
 
-    def continueExecution(self, cmd: Command) -> StateCtx:
+    def continueExecution(self, cmd: Command) -> StateCtx | None:
         if cmd is CommitComand:
             if len(cmd.commands) != 1:
                 raise Exception("commit command must have exactly one command")
             return self.continueExecution(cmd.commands[0])
         elif cmd is ExecuteCommand:
             return cmd.stateCtx
+        elif cmd is TransitCommand:
+            return cmd.stateCtx
+        elif cmd is ResumeCommand:
+            return cmd.stateCtx
+        elif cmd is PauseCommand:
+            return None
+        elif cmd is DelayCommand:
+            return None
+        elif cmd is EndCommand:
+            return None
+        elif cmd is NoopCommand:
+            return None
         else:
             raise Exception(f"unknown command 123: {type(cmd)}")
