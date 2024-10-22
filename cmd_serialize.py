@@ -16,7 +16,7 @@ class SerializeCommand(Command):
     def __init__(
         self, serializable_state_ctx: StateCtx, state_ctx: StateCtx, annotation: str
     ):
-        self.serializableStateCtx = serializable_state_ctx
+        self.serializable_state_ctx = serializable_state_ctx
         self.state_ctx = state_ctx
         self.annotation = annotation
 

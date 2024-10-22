@@ -15,7 +15,7 @@ def pause(state_ctx: StateCtx) -> "PauseCommand":
 
 class PauseCommand(Command):
     state_ctx: StateCtx
-    flowId: FlowId
+    flow_id: FlowId
 
     def do(self, cmd: Command) -> None:
         if cmd is not PauseCommand:
@@ -30,9 +30,9 @@ class PauseCommand(Command):
         nextTs.set_annotation(StateAnnotation, "paused")
         cmd.state_ctx.current.transition = nextTs
 
-    def withTransit(self, fId: FlowId) -> "PauseCommand":
-        self.flowId = fId
+    def with_transit(self, f_id: FlowId) -> "PauseCommand":
+        self.flow_id = f_id
         return self
 
-    def committableStateCtx(self) -> StateCtx:
+    def committable_state_ctx(self) -> StateCtx:
         return self.state_ctx

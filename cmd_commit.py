@@ -2,11 +2,11 @@ from command import Command
 from state import StateCtx
 
 
-def Commit(*cmds: Command) -> "CommitCommand":
+def commit(*cmds: Command) -> "CommitCommand":
     return CommitCommand(cmds)
 
 class CommittableCommand:
-    def committableStateCtx(self) -> StateCtx:
+    def committable_state_ctx(self) -> StateCtx:
         pass
 
 
@@ -19,5 +19,5 @@ class CommitStateCtxCommand(Command):
     def __init__(self, state_ctx: StateCtx):
         self.state_ctx = state_ctx
 
-    def committableStateCtx(self) -> StateCtx:
+    def committable_state_ctx(self) -> StateCtx:
         return self.state_ctx

@@ -15,28 +15,28 @@ def delayed(state: State) -> bool:
 
 
 def delay(state_ctx: StateCtx, dur: timedelta) -> "DelayCommand":
-    return DelayCommand(state_ctx, dur)
+    return DelayCommand(state_ctx=state_ctx, duration=dur)
 
 
 class DelayCommand(Command):
     state_ctx: StateCtx
-    delayStateCtx: StateCtx
+    delay_state_ctx: StateCtx
     duration: timedelta
     commit: bool
 
     def __init__(
         self,
-        state_ctx: StateCtx,
-        delay_state_ctx: StateCtx,
-        duration: timedelta,
-        commmit: bool,
+        state_ctx: StateCtx = None,
+        delay_state_ctx: StateCtx = None,
+        duration: timedelta = None,
+        commit: bool = False,
     ):
         self.state_ctx = state_ctx
-        self.delayStateCtx = delay_state_ctx
+        self.delay_state_ctx = delay_state_ctx
         self.duration = duration
-        self.commit = commmit
+        self.commit = commit
 
-    def withCommit(self, commit: bool) -> "DelayCommand":
+    def with_commit(self, commit: bool) -> "DelayCommand":
         self.commit = commit
         return self
 
@@ -44,18 +44,18 @@ class DelayCommand(Command):
         delayed_state_ctx = self.state_ctx.copy_to(StateCtx())
         delayed_state_ctx.transitions.append(delayed_state_ctx.current.transition)
 
-        nextTs = Transition(
+        next_ts = Transition(
             from_id=delayed_state_ctx.current.transition.to_id,
             to_id=delayed_state_ctx.current.transition.to_id,
             annotations={},
         )
 
         if paused(delayed_state_ctx.current):
-            nextTs.set_annotation(StateAnnotation, "resumed")
+            next_ts.set_annotation(StateAnnotation, "resumed")
 
-        nextTs.set_annotation(DelayAtAnnotation, time_rfc3339micro())
-        nextTs.set_annotation(DelayDurationAnnotation, self.duration)
-        nextTs.set_annotation(DelayCommitAnnotation, self.commit)
+        next_ts.set_annotation(DelayAtAnnotation, time_rfc3339micro())
+        next_ts.set_annotation(DelayDurationAnnotation, self.duration)
+        next_ts.set_annotation(DelayCommitAnnotation, self.commit)
 
-        delayed_state_ctx.current.transition = nextTs
-        self.delayStateCtx = delayed_state_ctx
+        delayed_state_ctx.current.transition = next_ts
+        self.delay_state_ctx = delayed_state_ctx

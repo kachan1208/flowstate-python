@@ -2,7 +2,7 @@ from data import Data
 from command import Command
 
 
-def GetData(d: Data) -> "GetDataCommand":
+def get_data(d: Data) -> "GetDataCommand":
     return GetDataCommand(d)
 
 

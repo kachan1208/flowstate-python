@@ -18,7 +18,7 @@ class ResumeCommand(Command):
     def __init__(self, state_ctx: StateCtx):
         self.state_ctx = state_ctx
 
-    def committableStateCtx(self) -> StateCtx:
+    def committable_state_ctx(self) -> StateCtx:
         return self.state_ctx
 
 

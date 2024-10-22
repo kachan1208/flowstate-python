@@ -4,8 +4,10 @@ from command import Command
 from doer import Doer, ErrCommandNotSupported
 from transition import Transition
 
-def transit(state_ctx: StateCtx, fId: FlowId) -> "TransitCommand":
-    return TransitCommand(state_ctx, fId)
+
+def transit(state_ctx: StateCtx, f_id: FlowId) -> "TransitCommand":
+    return TransitCommand(state_ctx, f_id)
+
 
 class TransitCommand(Command):
     def __init__(self, state_ctx: StateCtx, f_id: FlowId):
@@ -15,19 +17,20 @@ class TransitCommand(Command):
     def committable_state_ctx(self) -> StateCtx:
         return self.state_ctx
 
+
 class DefaultTransitDoer(Doer):
     def do(self, cmd: Command):
         if cmd is not TransitCommand:
             raise ErrCommandNotSupported
 
-        if cmd.flowId == "":
+        if cmd.flow_id == "":
             raise Exception("flow id empty")
 
         cmd.state_ctx.transitions.append(cmd.state_ctx.current.transition)
-        nextTs = Transition(
+        next_ts = Transition(
             from_id=cmd.state_ctx.current.transition.to_id,
-            to_id=cmd.flowId,
+            to_id=cmd.flow_id,
             annotations={},
         )
 
-        cmd.state_ctx.current.transition = nextTs
+        cmd.state_ctx.current.transition = next_ts

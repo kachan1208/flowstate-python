@@ -13,21 +13,21 @@ class State:
         self.rev: int = 0
         self.annotations: dict[str, str]
         self.labels: dict[str, str]
-        self.commitedAtUnixMilli: int = 0
+        self.commited_at_unix_milli: int = 0
         self.transition: Transition = Transition()
 
     def set_commited_at(self, commited_at: datetime):
-        self.commitedAtUnixMilli = round(commited_at.now().timestamp() * 1000)
+        self.commited_at_unix_milli = round(commited_at.now().timestamp() * 1000)
 
     def commited_at(self) -> datetime:
-        return datetime.fromtimestamp(self.commitedAtUnixMilli / 1000)
+        return datetime.fromtimestamp(self.commited_at_unix_milli / 1000)
 
     def copy_to(self, to: "State") -> "State":
         to.id = self.id
         to.rev = self.rev
         to.annotations = self.annotations.copy()
         to.labels = self.labels.copy()
-        to.commitedAtUnixMilli = self.commitedAtUnixMilli
+        to.commited_at_unix_milli = self.commited_at_unix_milli
         self.transition.copy_to(to.transition)
 
         return to
@@ -51,7 +51,7 @@ class StateCtx:
     e: Engine
 
     def __init__(
-        self, current: State, commited: State, transitions: list[Transition], e: Engine
+        self, current: State = None, commited: State = None, transitions: list[Transition] = None, e: Engine = None
     ) -> None:
         self.current = current
         self.commited = commited
