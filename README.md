@@ -1,1 +1,1 @@
-dev is in init-branch
+Python implemenation of [flowstate](https://github.com/makasim/flowstate)

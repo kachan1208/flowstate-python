@@ -1,0 +1,20 @@
+version: '3'
+
+tasks:
+  test:
+    description: Run tests
+    commands:
+      - echo "Running tests"
+      - pytest
+
+  lint:
+    description: Lint code
+    commands:
+      - echo "Linting code"
+      - flake8
+
+  format:
+    description: Format code
+    commands:
+      - echo "Formatting code"
+      - black .
