@@ -25,7 +25,7 @@ class FlowRegistry(Doer):
         except Exception as e:
             raise e
 
-    def setFlow(self, id: FlowId, flow: Flow):
+    def set_flow(self, id: FlowId, flow: Flow):
         self.flows[id] = flow
 
     def flow(self, id: FlowId) -> Flow:

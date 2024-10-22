@@ -51,9 +51,9 @@ class Engine:
                 raise e
 
             try:
-                nextStateCtx = self.continue_execution(cmd0)
-                if nextStateCtx is not None:
-                    state_ctx = nextStateCtx
+                next_state_ctx = self.continue_execution(cmd0)
+                if next_state_ctx is not None:
+                    state_ctx = next_state_ctx
                     continue
             except Exception as e:
                 raise e
@@ -74,7 +74,7 @@ class Engine:
             if cmd0.sync:
                 return
 
-            # TODO: add asynio support
+            # TODO: add asyncio support
             try:
                 self.execute(cmd0.state_ctx)
             except Exception as e:
@@ -116,4 +116,4 @@ class Engine:
         elif typ is NoopCommand:
             return None
         else:
-            raise Exception(f"unknown command 123: {type(cmd)}")
+            raise Exception(f"unknown command 123: {typ}")
