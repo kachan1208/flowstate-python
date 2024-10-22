@@ -1,7 +1,7 @@
 from state import StateCtx, State, StateAnnotation
 from command import Command
 from flow import FlowId
-from doer import ErrCommandNotSupported
+from doer import Doer, ErrCommandNotSupported
 from transition import Transition
 
 
@@ -14,6 +14,19 @@ def pause(state_ctx: StateCtx) -> "PauseCommand":
 
 
 class PauseCommand(Command):
+    def __init__(self, state_ctx: StateCtx, flow_id: FlowId):
+        self.state_ctx: StateCtx = state_ctx
+        self.flow_id: FlowId = flow_id
+
+    def with_transit(self, f_id: FlowId) -> "PauseCommand":
+        self.flow_id = f_id
+        return self
+
+    def committable_state_ctx(self) -> StateCtx:
+        return self.state_ctx
+
+
+class DefaultPauseDoer(Doer):
     state_ctx: StateCtx
     flow_id: FlowId
 
@@ -22,17 +35,10 @@ class PauseCommand(Command):
             raise ErrCommandNotSupported
 
         cmd.state_ctx.transitions.append(cmd.state_ctx.current.transition)
-        nextTs = Transition(
+        next_ts = Transition(
             from_id=cmd.state_ctx.current.transition.to_id,
             to_id=cmd.flowId,
             annotations={},
         )
-        nextTs.set_annotation(StateAnnotation, "paused")
-        cmd.state_ctx.current.transition = nextTs
-
-    def with_transit(self, f_id: FlowId) -> "PauseCommand":
-        self.flow_id = f_id
-        return self
-
-    def committable_state_ctx(self) -> StateCtx:
-        return self.state_ctx
+        next_ts.set_annotation(StateAnnotation, "paused")
+        cmd.state_ctx.current.transition = next_ts

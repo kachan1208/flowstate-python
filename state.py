@@ -8,13 +8,12 @@ StateId = str
 
 
 class State:
-    def __init__(self) -> None:
-        self.id: str = ""
-        self.rev: int = 0
-        self.annotations: dict[str, str]
-        self.labels: dict[str, str]
-        self.commited_at_unix_milli: int = 0
-        self.transition: Transition = Transition()
+    id: str
+    rev: int
+    annotations: dict[str, str]
+    labels: dict[str, str]
+    commited_at_unix_milli: int
+    transition: Transition
 
     def set_commited_at(self, commited_at: datetime):
         self.commited_at_unix_milli = round(commited_at.now().timestamp() * 1000)

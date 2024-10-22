@@ -13,13 +13,15 @@ def deserialize(
 
 
 class DeserializeCommand(Command):
-    def __init__(self, state_ctx: StateCtx, deserialized_ctx: StateCtx, annotation: str):
+    def __init__(
+        self, state_ctx: StateCtx, deserialized_ctx: StateCtx, annotation: str
+    ):
         self.state_ctx = state_ctx
         self.deserialized_ctx = deserialized_ctx
         self.annotation = annotation
 
 
-def DefaultDeserializeCommand(Doer):
+class DefaultDeserializeDoer(Doer):
     def do(self, cmd: Command):
         if cmd is not DeserializeCommand:
             raise ErrCommandNotSupported

@@ -18,14 +18,14 @@ class DefaultEndDoer(Doer):
             raise ErrCommandNotSupported
 
         cmd.state_ctx.transitions.append(cmd.state_ctx.current.transition)
-        nextTs = Transition(
+        next_ts = Transition(
             from_id=cmd.state_ctx.current.transition.to_id,
             to_id="",
             annotations={},
         )
 
-        nextTs.set_annotation(StateAnnotation, "ended")
-        cmd.state_ctx.current.transition = nextTs
+        next_ts.set_annotation(StateAnnotation, "ended")
+        cmd.state_ctx.current.transition = next_ts
 
 
 def ended(state: State) -> bool:
