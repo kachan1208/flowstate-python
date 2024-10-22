@@ -2,32 +2,32 @@ from state import StateCtx, StateId
 from command import Command
 
 
-def GetById(stateCtx: StateCtx, id: StateId, rev: int) -> "GetCommand":
-    return GetCommand(stateCtx, id).withId(id).withRev(rev)
+def get_by_id(state_ctx: StateCtx, id: StateId, rev: int) -> "GetCommand":
+    return GetCommand(state_ctx, id).with_id(id).with_rev(rev)
 
 
 class GetCommand(Command):
-    stateCtx: StateCtx
+    state_ctx: StateCtx
     id: StateId
     rev: int
     labels = dict[str, str]
 
-    def __init__(self, stateCtx: StateCtx, stateId: StateId):
-        self.stateCtx = stateCtx
-        self.stateId = stateId
+    def __init__(self, state_ctx: StateCtx, state_id: StateId):
+        self.state_ctx = state_ctx
+        self.stateId = state_id
         self.id: StateId
         self.rev: int
 
-    def withId(self, id: StateId) -> "GetCommand":
+    def with_id(self, id: StateId) -> "GetCommand":
         self.labels = dict[str, str]
         self.id = id
         return self
 
-    def withRev(self, rev: int) -> "GetCommand":
+    def with_rev(self, rev: int) -> "GetCommand":
         self.rev = rev
         return self
 
-    def withLabels(self, labels: dict[str, str]) -> "GetCommand":
+    def with_labels(self, labels: dict[str, str]) -> "GetCommand":
         self.id = StateId("")
         self.rev = 0
         self.labels = labels

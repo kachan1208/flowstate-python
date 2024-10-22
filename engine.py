@@ -2,11 +2,10 @@ import logging
 from doer import Doer
 from state import StateCtx
 from flow import Flow
-from cmd_get_flow import GetFlow
+from cmd_get_flow import get_flow
 from errors import ErrCommitConflict
-from cmd_commit import CommitComand
+from cmd_commit import CommitCommand
 from cmd_execute import ExecuteCommand
-from cmd_resume import ResumeCommand
 from cmd_transit import TransitCommand
 from cmd_resume import ResumeCommand
 from cmd_pause import PauseCommand
@@ -28,19 +27,19 @@ class Engine:
         except Exception as e:
             raise Exception("driver init") from e
 
-    def execute(self, stateCtx: StateCtx):
-        stateCtx.e = self
+    def execute(self, state_ctx: StateCtx):
+        state_ctx.e = self
 
-        if stateCtx.current.id == "":
+        if state_ctx.current.id == "":
             raise Exception("state id is empty")
 
-        while not stateCtx.done():
-            if stateCtx.current.transition.toId == "":
+        while not state_ctx.done():
+            if state_ctx.current.transition.to_id == "":
                 raise Exception("transition to id is empty")
 
             try:
-                f = self.getFlow(stateCtx)
-                cmd0 = f.execute(stateCtx, self)
+                f = self.get_flow(state_ctx)
+                cmd0 = f.execute(state_ctx, self)
                 if cmd0 is ExecuteCommand:
                     cmd0.sync = True
 
@@ -52,9 +51,9 @@ class Engine:
                 raise e
 
             try:
-                nextStateCtx = self.continueExecution(cmd0)
+                nextStateCtx = self.continue_execution(cmd0)
                 if nextStateCtx is not None:
-                    stateCtx = nextStateCtx
+                    state_ctx = nextStateCtx
                     continue
             except Exception as e:
                 raise e
@@ -77,7 +76,7 @@ class Engine:
 
             # TODO: add asynio support
             try:
-                self.execute(cmd0.stateCtx)
+                self.execute(cmd0.state_ctx)
             except Exception as e:
                 raise e
 
@@ -87,8 +86,8 @@ class Engine:
             except Exception as e:
                 raise e
 
-    def getFlow(self, stateCtx: StateCtx) -> Flow:
-        cmd = GetFlow(stateCtx)
+    def get_flow(self, state_ctx: StateCtx) -> Flow:
+        cmd = get_flow(state_ctx)
         try:
             self.d.do(cmd)
         except Exception as e:
@@ -96,24 +95,25 @@ class Engine:
 
         return cmd.flow
 
-    def continueExecution(self, cmd: Command) -> StateCtx | None:
-        if cmd is CommitComand:
+    def continue_execution(self, cmd: Command) -> StateCtx | None:
+        typ = type(cmd)
+        if typ is CommitCommand:
             if len(cmd.commands) != 1:
                 raise Exception("commit command must have exactly one command")
-            return self.continueExecution(cmd.commands[0])
-        elif cmd is ExecuteCommand:
-            return cmd.stateCtx
-        elif cmd is TransitCommand:
-            return cmd.stateCtx
-        elif cmd is ResumeCommand:
-            return cmd.stateCtx
-        elif cmd is PauseCommand:
+            return self.continue_execution(cmd.commands[0])
+        elif typ is ExecuteCommand:
+            return cmd.state_ctx
+        elif typ is TransitCommand:
+            return cmd.state_ctx
+        elif typ is ResumeCommand:
+            return cmd.state_ctx
+        elif typ is PauseCommand:
             return None
-        elif cmd is DelayCommand:
+        elif typ is DelayCommand:
             return None
-        elif cmd is EndCommand:
+        elif typ is EndCommand:
             return None
-        elif cmd is NoopCommand:
+        elif typ is NoopCommand:
             return None
         else:
             raise Exception(f"unknown command 123: {type(cmd)}")

@@ -3,15 +3,15 @@ from command import Command
 from doer import Doer, ErrCommandNotSupported
 
 
-def Noop(stateCtx: StateCtx) -> "NoopCommand":
-    return NoopCommand(stateCtx)
+def noop(state_ctx: StateCtx) -> "NoopCommand":
+    return NoopCommand(state_ctx)
 
 
 class NoopCommand(Command):
-    stateCtx: StateCtx
+    state_ctx: StateCtx
 
-    def __init__(self, stateCtx: StateCtx):
-        self.stateCtx = stateCtx
+    def __init__(self, state_ctx: StateCtx):
+        self.state_ctx = state_ctx
 
 
 class DefaultNoopDoer(Doer):

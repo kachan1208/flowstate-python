@@ -4,14 +4,14 @@ from flow import Flow
 
 
 class GetFlowCommand(Command):
-    def __init__(self, stateCtx: StateCtx):
-        self.stateCtx = stateCtx
+    def __init__(self, state_ctx: StateCtx):
+        self.state_ctx = state_ctx
         self.flow: Flow
 
     def cmd(self):
         pass
 
 
-def GetFlow(stateCtx: StateCtx) -> GetFlowCommand:
-    cmd = GetFlowCommand(stateCtx)
+def get_flow(state_ctx: StateCtx) -> GetFlowCommand:
+    cmd = GetFlowCommand(state_ctx)
     return cmd

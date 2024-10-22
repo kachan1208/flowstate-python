@@ -6,22 +6,22 @@ from doer import Doer, ErrCommandNotSupported
 from command import Command
 
 
-def Serialize(
-    serializableStateCtx: StateCtx, stateCtx: StateCtx, annotation: str
+def serialize(
+    serializable_state_ctx: StateCtx, state_ctx: StateCtx, annotation: str
 ) -> "SerializeCommand":
-    return SerializeCommand(serializableStateCtx, stateCtx, annotation)
+    return SerializeCommand(serializable_state_ctx, state_ctx, annotation)
 
 
 class SerializeCommand(Command):
     def __init__(
-        self, serializableStateCtx: StateCtx, stateCtx: StateCtx, annotation: str
+        self, serializable_state_ctx: StateCtx, state_ctx: StateCtx, annotation: str
     ):
-        self.serializableStateCtx = serializableStateCtx
-        self.stateCtx = stateCtx
+        self.serializableStateCtx = serializable_state_ctx
+        self.state_ctx = state_ctx
         self.annotation = annotation
 
 
-def DefaultSerializeDoer(Doer):
+class DefaultSerializeDoer(Doer):
     def do(self, cmd: Command):
         if cmd is not SerializeCommand:
             raise ErrCommandNotSupported
@@ -29,13 +29,13 @@ def DefaultSerializeDoer(Doer):
         if cmd.annotation == "":
             raise Exception("store annotation name empty")
 
-        if cmd.stateCtx.current.annotations[cmd.annotation] != "":
+        if cmd.state_ctx.current.annotations[cmd.annotation] != "":
             raise Exception("store annotation already set")
 
         try:
-            b = json.JSONEncoder().encode(cmd.serializableStateCtx)
+            b = json.JSONEncoder().encode(cmd.serializable_state_ctx)
         except Exception as e:
             raise e("json encode prev state ctx")
 
         serialized = base64.standard_b64encode(b)
-        cmd.stateCtx.current.setAnnotation(cmd.annotation, serialized)
+        cmd.state_ctx.current.set_annotation(cmd.annotation, serialized)

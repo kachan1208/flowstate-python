@@ -16,31 +16,31 @@ class State:
         self.commitedAtUnixMilli: int = 0
         self.transition: Transition = Transition()
 
-    def setCommitedAt(self, commitedAt: datetime):
-        self.commitedAtUnixMilli = round(commitedAt.now().timestamp() * 1000)
+    def set_commited_at(self, commited_at: datetime):
+        self.commitedAtUnixMilli = round(commited_at.now().timestamp() * 1000)
 
-    def commitedAt(self) -> datetime:
+    def commited_at(self) -> datetime:
         return datetime.fromtimestamp(self.commitedAtUnixMilli / 1000)
 
-    def copyTo(self, to: "State") -> "State":
+    def copy_to(self, to: "State") -> "State":
         to.id = self.id
         to.rev = self.rev
         to.annotations = self.annotations.copy()
         to.labels = self.labels.copy()
         to.commitedAtUnixMilli = self.commitedAtUnixMilli
-        self.transition.CopyTo(to.transition)
+        self.transition.copy_to(to.transition)
 
         return to
 
-    def copyToCtx(self, to: "StateCtx") -> "StateCtx":
-        self.copyTo(to.commited)
-        self.copyTo(to.current)
+    def copy_to_ctx(self, to: "StateCtx") -> "StateCtx":
+        self.copy_to(to.commited)
+        self.copy_to(to.current)
         return to
 
-    def setAnnotation(self, name: str, value: str):
+    def set_annotation(self, name: str, value: str):
         self.annotations[name] = value
 
-    def setLabel(self, name: str, value: str):
+    def set_label(self, name: str, value: str):
         self.labels[name] = value
 
 
@@ -58,9 +58,9 @@ class StateCtx:
         self.transitions = transitions
         self.e = e
 
-    def copyTo(self, to: "StateCtx") -> "StateCtx":
-        self.current.copyTo(to.current)
-        self.commited.copyTo(to.commited)
+    def copy_to(self, to: "StateCtx") -> "StateCtx":
+        self.current.copy_to(to.current)
+        self.commited.copy_to(to.commited)
 
         if len(to.transitions) >= len(self.transitions):
             to.transitions = to.transitions[: len(self.transitions)]
@@ -68,12 +68,12 @@ class StateCtx:
             to.transitions = [Transition() for _ in range(len(self.transitions))]
 
         for idx in range(len(self.transitions)):
-            self.transitions[idx].copyTo(to.transitions[idx])
+            self.transitions[idx].copy_to(to.transitions[idx])
 
         return to
 
-    def newTo(self, id: str, to: "StateCtx") -> "StateCtx":
-        self.copyTo(to)
+    def new_to(self, id: str, to: "StateCtx") -> "StateCtx":
+        self.copy_to(to)
         to.current.id = id
         to.current.rev = 0
         to.current.id = id

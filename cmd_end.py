@@ -5,11 +5,11 @@ from transition import Transition
 
 
 class EndCommand(Command):
-    def __init__(self, stateCtx: StateCtx) -> None:
-        self.stateCtx = stateCtx
+    def __init__(self, state_ctx: StateCtx) -> None:
+        self.state_ctx = state_ctx
 
-    def committableStateCtx(self) -> StateCtx:
-        return self.stateCtx
+    def committable_state_ctx(self) -> StateCtx:
+        return self.state_ctx
 
 
 class DefaultEndDoer(Doer):
@@ -17,20 +17,20 @@ class DefaultEndDoer(Doer):
         if cmd is not EndCommand:
             raise ErrCommandNotSupported
 
-        cmd.stateCtx.transitions.append(cmd.stateCtx.current.transition)
+        cmd.state_ctx.transitions.append(cmd.state_ctx.current.transition)
         nextTs = Transition(
-            fromId=cmd.stateCtx.current.transition.toId,
-            toId="",
+            from_id=cmd.state_ctx.current.transition.to_id,
+            to_id="",
             annotations={},
         )
 
-        nextTs.setAnnotation(StateAnnotation, "ended")
-        cmd.stateCtx.current.transition = nextTs
+        nextTs.set_annotation(StateAnnotation, "ended")
+        cmd.state_ctx.current.transition = nextTs
 
 
-def Ended(state: State) -> bool:
+def ended(state: State) -> bool:
     return state.transition.annotations[StateAnnotation] == "ended"
 
 
-def End(stateCtx: StateCtx) -> EndCommand:
-    return EndCommand(stateCtx)
+def end(state_ctx: StateCtx) -> EndCommand:
+    return EndCommand(state_ctx)

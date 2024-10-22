@@ -6,16 +6,16 @@ from command import Command
 from doer import Doer, ErrCommandNotSupported
 
 
-def Deserialize(
-    stateCtx: StateCtx, deserializedCtx: StateCtx, annotation: str
+def deserialize(
+    state_ctx: StateCtx, deserialized_ctx: StateCtx, annotation: str
 ) -> "DeserializeCommand":
-    return DeserializeCommand(stateCtx, deserializedCtx, annotation)
+    return DeserializeCommand(state_ctx, deserialized_ctx, annotation)
 
 
 class DeserializeCommand(Command):
-    def __init__(self, stateCtx: StateCtx, deserializedCtx: StateCtx, annotation: str):
-        self.stateCtx = stateCtx
-        self.deserializedCtx = deserializedCtx
+    def __init__(self, state_ctx: StateCtx, deserialized_ctx: StateCtx, annotation: str):
+        self.state_ctx = state_ctx
+        self.deserialized_ctx = deserialized_ctx
         self.annotation = annotation
 
 
@@ -24,7 +24,7 @@ def DefaultDeserializeCommand(Doer):
         if cmd is not DeserializeCommand:
             raise ErrCommandNotSupported
 
-        serializedState = cmd.stateCtx.current.state.annotations[cmd.annotation]
+        serializedState = cmd.state_ctx.current.state.annotations[cmd.annotation]
         if serializedState == "":
             raise Exception("store annotation value empty")
 
@@ -34,8 +34,8 @@ def DefaultDeserializeCommand(Doer):
             raise e("base64 decode")
 
         try:
-            cmd.deserializedCtx = json.loads(b)
+            cmd.deserialized_ctx = json.loads(b)
         except Exception as e:
             raise e("json load")
 
-        cmd.stateCtx.current.annotations[cmd.annotation] = ""
+        cmd.state_ctx.current.annotations[cmd.annotation] = ""

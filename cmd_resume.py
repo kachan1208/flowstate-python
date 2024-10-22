@@ -4,22 +4,22 @@ from doer import Doer, ErrCommandNotSupported
 from transition import Transition
 
 
-def Resumed(state: State) -> bool:
+def resumed(state: State) -> bool:
     return state.transition.annotations[StateAnnotation] == "resumed"
 
 
-def Resume(stateCtx: StateCtx) -> "ResumeCommand":
-    return ResumeCommand(stateCtx)
+def resume(state_ctx: StateCtx) -> "ResumeCommand":
+    return ResumeCommand(state_ctx)
 
 
 class ResumeCommand(Command):
-    stateCtx: StateCtx
+    state_ctx: StateCtx
 
-    def __init__(self, stateCtx: StateCtx):
-        self.stateCtx = stateCtx
+    def __init__(self, state_ctx: StateCtx):
+        self.state_ctx = state_ctx
 
     def committableStateCtx(self) -> StateCtx:
-        return self.stateCtx
+        return self.state_ctx
 
 
 class DefaultResumeDoer(Doer):
@@ -27,12 +27,12 @@ class DefaultResumeDoer(Doer):
         if cmd is not ResumeCommand:
             raise ErrCommandNotSupported
 
-        cmd.stateCtx.transitions.append(cmd.stateCtx.current.transition)
+        cmd.state_ctx.transitions.append(cmd.state_ctx.current.transition)
         nextTs = Transition(
-            fromId=cmd.stateCtx.current.transition.toId,
-            toId=cmd.stateCtx.current.transition.toId,
+            from_id=cmd.state_ctx.current.transition.to_id,
+            to_id=cmd.state_ctx.current.transition.to_id,
             annotations={},
         )
 
-        nextTs.setAnnotation(StateAnnotation, "resumed")
-        cmd.stateCtx.current.transition = nextTs
+        nextTs.set_annotation(StateAnnotation, "resumed")
+        cmd.state_ctx.current.transition = nextTs

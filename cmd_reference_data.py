@@ -4,19 +4,19 @@ from doer import Doer, ErrCommandNotSupported
 from command import Command
 
 
-def ReferenceData(
-    stateCtx: StateCtx, data: Data, annotation: str
+def reference_data(
+    state_ctx: StateCtx, data: Data, annotation: str
 ) -> "ReferenceDataCommand":
-    return ReferenceDataCommand(stateCtx=stateCtx, data=data, annotation=annotation)
+    return ReferenceDataCommand(state_ctx=state_ctx, data=data, annotation=annotation)
 
 
 class ReferenceDataCommand(Command):
-    stateCtx: StateCtx
+    state_ctx: StateCtx
     data: Data
     annotation: str
 
-    def __init__(self, stateCtx: StateCtx, data: Data, annotation: str):
-        self.stateCtx = stateCtx
+    def __init__(self, state_ctx: StateCtx, data: Data, annotation: str):
+        self.state_ctx = state_ctx
         self.data = data
         self.annotation = annotation
 
@@ -32,6 +32,6 @@ class DefaultReferenceDataDoer(Doer):
         if cmd.data.rev < 0:
             raise Exception("data revision is negative")
 
-        cmd.stateCtx.current.setAnnotation(
+        cmd.state_ctx.current.set_annotation(
             cmd.annotation, f"data:{cmd.data.id}:{cmd.data.rev}"
         )

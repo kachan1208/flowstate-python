@@ -6,7 +6,7 @@ class Data:
     rev: int
     b: bytearray
 
-    def __init__(self, id: DataId, rev: int, b: bytes):
+    def __init__(self, id: DataId, rev: int, b: bytearray):
         self.id = id
         self.rev = rev
         self.b = b

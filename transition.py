@@ -2,24 +2,24 @@ from flow import FlowId
 
 
 class Transition:
-    fromId: FlowId
-    toId: FlowId
+    from_id: FlowId
+    to_id: FlowId
     annotations: dict
 
-    def __init__(self, frowId: FlowId, toId: FlowId, annotations: dict) -> None:
-        self.fromId = frowId
-        self.toId = toId
+    def __init__(self, flow_id: FlowId, to_id: FlowId, annotations: dict) -> None:
+        self.from_id = flow_id
+        self.to_id = to_id
         self.annotations = annotations
 
-    def setAnnotation(self, name: str, value: str):
+    def set_annotation(self, name: str, value: str):
         self.annotations[name] = value
 
-    def copyTo(self, to: "Transition") -> "Transition":
-        to.fromId = self.fromId
-        to.toId = self.toId
+    def copy_to(self, to: "Transition") -> "Transition":
+        to.from_id = self.from_id
+        to.to_id = self.to_id
         to.annotations = self.annotations.copy()
 
         return to
 
     def string(self) -> str:
-        return f"{self.fromId} -> {self.toId}"
+        return f"{self.from_id} -> {self.to_id}"

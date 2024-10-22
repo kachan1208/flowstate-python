@@ -3,10 +3,10 @@ from command import Command
 
 
 class ExecuteCommand(Command):
-    def __init__(self, stateCtx: StateCtx):
+    def __init__(self, state_ctx: StateCtx):
         self.sync: bool
-        self.stateCtx = stateCtx
+        self.state_ctx = state_ctx
 
 
-def Execute(stateCtx: StateCtx) -> ExecuteCommand:
-    return ExecuteCommand(stateCtx)
+def execute(state_ctx: StateCtx) -> ExecuteCommand:
+    return ExecuteCommand(state_ctx)

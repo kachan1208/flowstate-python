@@ -1,7 +1,7 @@
 from data import Data
 from command import Command
 
-def StoreData(data: Data) -> "StoreDataCommand":
+def store_data(data: Data) -> "StoreDataCommand":
     return StoreDataCommand(data)
 
 class StoreDataCommand(Command):

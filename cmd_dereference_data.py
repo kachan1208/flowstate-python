@@ -4,19 +4,19 @@ from command import Command
 from doer import Doer, ErrCommandNotSupported
 
 
-def DereferenceData(
-    stateCtx: StateCtx, data: Data, annotation: str
+def dereference_data(
+    state_ctx: StateCtx, data: Data, annotation: str
 ) -> "DereferenceDataCommand":
-    return DereferenceDataCommand(stateCtx=stateCtx, data=data, annotation=annotation)
+    return DereferenceDataCommand(state_ctx, data, annotation)
 
 
 class DereferenceDataCommand(Command):
-    stateCtx: StateCtx
+    state_ctx: StateCtx
     data: Data
     annotation: str
 
-    def __init__(self, stateCtx: StateCtx, data: Data, annotation: str):
-        self.stateCtx = stateCtx
+    def __init__(self, state_ctx: StateCtx, data: Data, annotation: str):
+        self.state_ctx = state_ctx
         self.data = data
         self.annotation = annotation
 
@@ -26,11 +26,11 @@ class DefaultDereferenceDataDoer(Doer):
         if cmd is DereferenceDataCommand:
             raise ErrCommandNotSupported
 
-        serializedData = cmd.stateCtx.current.annotation[cmd.annotation]
-        if serializedData == "":
+        serialized_data = cmd.state_ctx.current.annotation[cmd.annotation]
+        if serialized_data == "":
             raise Exception("data is not serialized")
 
-        splits = serializedData.split(":", 3)
+        splits = serialized_data.split(":", 3)
         if len(splits) != 3:
             raise Exception("data is not serialized correctly")
 
@@ -44,12 +44,12 @@ class DefaultDereferenceDataDoer(Doer):
             raise Exception("serialized data revision is empty")
 
         try:
-            dRev = int(splits[2])
+            d_rev = int(splits[2])
         except Exception as e:
             raise e
 
-        if dRev < 0:
+        if d_rev < 0:
             raise Exception("serialized data revision is negative")
 
         cmd.data.id = DataId(splits[1])
-        cmd.data.rev = dRev
+        cmd.data.rev = d_rev

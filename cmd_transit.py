@@ -4,16 +4,16 @@ from command import Command
 from doer import Doer, ErrCommandNotSupported
 from transition import Transition
 
-def Transit(stateCtx: StateCtx, fId: FlowId) -> "TransitCommand":
-    return TransitCommand(stateCtx, fId)
+def transit(state_ctx: StateCtx, fId: FlowId) -> "TransitCommand":
+    return TransitCommand(state_ctx, fId)
 
 class TransitCommand(Command):
-    def __init__(self, stateCtx: StateCtx, fId: FlowId):
-        self.stateCtx = stateCtx
-        self.flowId = fId
+    def __init__(self, state_ctx: StateCtx, f_id: FlowId):
+        self.state_ctx = state_ctx
+        self.flowId = f_id
 
-    def committableStateCtx(self) -> StateCtx:
-        return self.stateCtx
+    def committable_state_ctx(self) -> StateCtx:
+        return self.state_ctx
 
 class DefaultTransitDoer(Doer):
     def do(self, cmd: Command):
@@ -23,11 +23,11 @@ class DefaultTransitDoer(Doer):
         if cmd.flowId == "":
             raise Exception("flow id empty")
 
-        cmd.stateCtx.transitions.append(cmd.stateCtx.current.transition)
+        cmd.state_ctx.transitions.append(cmd.state_ctx.current.transition)
         nextTs = Transition(
-            fromId=cmd.stateCtx.current.transition.toId,
-            toId=cmd.flowId,
+            from_id=cmd.state_ctx.current.transition.to_id,
+            to_id=cmd.flowId,
             annotations={},
         )
 
-        cmd.stateCtx.current.transition = nextTs
+        cmd.state_ctx.current.transition = nextTs

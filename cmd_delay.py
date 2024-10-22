@@ -1,7 +1,7 @@
 from state import StateCtx, State, StateAnnotation
 from command import Command
 from transition import Transition
-from cmd_pause import Paused
+from cmd_pause import paused
 from utils import time_rfc3339micro
 from datetime import timedelta
 
@@ -10,29 +10,29 @@ DelayDurationAnnotation = "flowstate.delay.duration"
 DelayCommitAnnotation = "flowstate.delay.commit"
 
 
-def Delayed(state: State) -> bool:
+def delayed(state: State) -> bool:
     return state.transition.annotations[DelayAtAnnotation] != ""
 
 
-def Delay(stateCtx: StateCtx, dur: timedelta) -> "DelayCommand":
-    return DelayCommand(stateCtx, dur)
+def delay(state_ctx: StateCtx, dur: timedelta) -> "DelayCommand":
+    return DelayCommand(state_ctx, dur)
 
 
 class DelayCommand(Command):
-    stateCtx: StateCtx
+    state_ctx: StateCtx
     delayStateCtx: StateCtx
     duration: timedelta
     commit: bool
 
     def __init__(
         self,
-        stateCtx: StateCtx,
-        delayStateCtx: StateCtx,
+        state_ctx: StateCtx,
+        delay_state_ctx: StateCtx,
         duration: timedelta,
         commmit: bool,
     ):
-        self.stateCtx = stateCtx
-        self.delayStateCtx = delayStateCtx
+        self.state_ctx = state_ctx
+        self.delayStateCtx = delay_state_ctx
         self.duration = duration
         self.commit = commmit
 
@@ -41,21 +41,21 @@ class DelayCommand(Command):
         return self
 
     def prepare(self):
-        delayedStateCtx = self.stateCtx.copyTo(StateCtx())
-        delayedStateCtx.transitions.append(delayedStateCtx.current.transition)
+        delayed_state_ctx = self.state_ctx.copy_to(StateCtx())
+        delayed_state_ctx.transitions.append(delayed_state_ctx.current.transition)
 
         nextTs = Transition(
-            fromId=delayedStateCtx.current.transition.toId,
-            toId=delayedStateCtx.current.transition.toId,
+            from_id=delayed_state_ctx.current.transition.to_id,
+            to_id=delayed_state_ctx.current.transition.to_id,
             annotations={},
         )
 
-        if Paused(delayedStateCtx.current):
-            nextTs.setAnnotation(StateAnnotation, "resumed")
+        if paused(delayed_state_ctx.current):
+            nextTs.set_annotation(StateAnnotation, "resumed")
 
-        nextTs.setAnnotation(DelayAtAnnotation, time_rfc3339micro())
-        nextTs.setAnnotation(DelayDurationAnnotation, self.duration)
-        nextTs.setAnnotation(DelayCommitAnnotation, self.commit)
+        nextTs.set_annotation(DelayAtAnnotation, time_rfc3339micro())
+        nextTs.set_annotation(DelayDurationAnnotation, self.duration)
+        nextTs.set_annotation(DelayCommitAnnotation, self.commit)
 
-        delayedStateCtx.current.transition = nextTs
-        self.delayStateCtx = delayedStateCtx
+        delayed_state_ctx.current.transition = nextTs
+        self.delayStateCtx = delayed_state_ctx
