@@ -15,7 +15,7 @@ from cmd_dereference_data import DefaultDereferenceDataDoer
 from cmd_reference_data import DefaultReferenceDataDoer
 
 
-class Driver:
+class Driver(Doer):
     l: Log
     doers: list[Doer]
     flow_registry: FlowRegistry

@@ -1,4 +1,21 @@
 import time
+from cmd_resume import resumed
+from state import StateCtx
+from cmd_pause import paused
+
+
+def track(state_ctx: StateCtx, trkr: "Tracker"):
+    postfix: str
+    if trkr.include_state:
+        if resumed(state_ctx.current):
+            postfix = ":resumed"
+        elif paused(state_ctx.current):
+            postfix = ":paused"
+
+    if trkr.include_task_id:
+        postfix += f"{postfix}:{state_ctx.current.id}"
+
+    trkr.visited.append(f"{state_ctx.current.transition.id}{postfix}")
 
 
 class Tracker:

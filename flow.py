@@ -1,18 +1,17 @@
 from command import Command
-from state import StateCtx
-from engine import Engine
 
 
 FlowId = str
 
 
 class Flow:
-    def execute(self, state_ctx: StateCtx, e: Engine) -> Command:
+    def execute(self, state_ctx, e) -> Command:
         pass
 
 
-def flow_func(func):
-    def execute(state_ctx: StateCtx, e: Engine) -> Command:
-        return func(state_ctx, e)
+class FlowFunc(Flow):
+    def __init__(self, func):
+        self.func = func
 
-    return execute
+    def execute(self, state_ctx, e) -> Command:
+        return self.func(state_ctx, e)

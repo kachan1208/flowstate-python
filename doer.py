@@ -1,15 +1,11 @@
-from engine import Engine
-from command import Command
-
-
 ErrCommandNotSupported = Exception("command not supported")
 
 
 class Doer:
-    def init(self, engine: Engine) -> None:
+    def init(self, engine) -> None:
         pass
 
-    def do(self, cmd: Command) -> None:
+    def do(self, cmd) -> None:
         pass
 
     def shutdown(self) -> None:

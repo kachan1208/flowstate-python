@@ -74,7 +74,6 @@ class Engine:
             if cmd0.sync:
                 return
 
-            # TODO: add asyncio support
             try:
                 self.execute(cmd0.state_ctx)
             except Exception as e:

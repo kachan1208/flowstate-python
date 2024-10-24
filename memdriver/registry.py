@@ -7,9 +7,7 @@ from cmd_get_flow import GetFlowCommand
 
 
 class FlowRegistry(Doer):
-    flows = dict[FlowId, Flow]
-
-    def __init__(self, flows: dict[FlowId, Flow] = None):
+    def __init__(self, flows: dict[FlowId, Flow] = {}):
         self.flows = flows
 
     def set_flow(self, id: FlowId, flow: Flow):
