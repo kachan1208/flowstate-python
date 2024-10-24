@@ -12,7 +12,7 @@ def transit(state_ctx: StateCtx, f_id: FlowId) -> "TransitCommand":
 class TransitCommand(Command):
     def __init__(self, state_ctx: StateCtx, f_id: FlowId):
         self.state_ctx = state_ctx
-        self.flowId = f_id
+        self.flow_id = f_id
 
     def committable_state_ctx(self) -> StateCtx:
         return self.state_ctx
@@ -20,7 +20,7 @@ class TransitCommand(Command):
 
 class DefaultTransitDoer(Doer):
     def do(self, cmd: Command):
-        if cmd is not TransitCommand:
+        if not isinstance(cmd, TransitCommand):
             raise ErrCommandNotSupported
 
         if cmd.flow_id == "":

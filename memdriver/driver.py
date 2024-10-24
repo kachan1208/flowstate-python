@@ -25,15 +25,15 @@ class Driver(Doer):
         self.flow_registry = FlowRegistry()
 
         self.doers = [
-            DefaultTransitDoer,
-            DefaultPauseDoer,
-            DefaultResumeDoer,
-            DefaultEndDoer,
-            DefaultNoopDoer,
-            DefaultSerializerDoer,
-            DefaultDeserializeDoer,
-            DefaultDereferenceDataDoer,
-            DefaultReferenceDataDoer,
+            DefaultTransitDoer(),
+            DefaultPauseDoer(),
+            DefaultResumeDoer(),
+            DefaultEndDoer(),
+            DefaultNoopDoer(),
+            DefaultSerializerDoer(),
+            DefaultDeserializeDoer(),
+            DefaultDereferenceDataDoer(),
+            DefaultReferenceDataDoer(),
             DataLog(),
             FlowGetter(self.flow_registry),
         ]

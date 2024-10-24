@@ -14,7 +14,7 @@ def test_single_node():
     flow_registry = FlowRegistry()
     tracker = Tracker()
 
-    def first(state_ctx: StateCtx, e: Engine) -> Command:
+    def first(state_ctx: StateCtx, _: Engine) -> Command:
         track(state_ctx, tracker)
         return end(state_ctx)
 
