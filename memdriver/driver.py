@@ -1,5 +1,6 @@
 from command import Command
 from engine import Engine
+from memdriver.data_log import DataLog
 from memdriver.registry import FlowRegistry, FlowGetter
 from memdriver.log import Log
 from doer import Doer, ErrCommandNotSupported
@@ -33,6 +34,7 @@ class Driver:
             DefaultDeserializeDoer,
             DefaultDereferenceDataDoer,
             DefaultReferenceDataDoer,
+            DataLog(),
             FlowGetter(self.flow_registry),
         ]
 

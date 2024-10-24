@@ -11,7 +11,7 @@ class Data:
         self.rev = rev
         self.b = b
 
-    def copyTo(self, to: "Data") -> "Data":
+    def copy_to(self, to: "Data") -> "Data":
         to.id = self.id
         to.rev = self.rev
         to.b[:] = self.b
