@@ -23,10 +23,10 @@ class DereferenceDataCommand(Command):
 
 class DefaultDereferenceDataDoer(Doer):
     def do(self, cmd: Command):
-        if cmd is DereferenceDataCommand:
+        if not isinstance(cmd, DereferenceDataCommand):
             raise ErrCommandNotSupported
 
-        serialized_data = cmd.state_ctx.current.annotation[cmd.annotation]
+        serialized_data = cmd.state_ctx.current.annotations[cmd.annotation]
         if serialized_data == "":
             raise Exception("data is not serialized")
 

@@ -1,4 +1,6 @@
-ErrCommandNotSupported = Exception("command not supported")
+class ErrCommandNotSupported(Exception):
+    def __init__(self, msg="Error command not supported", *args, **kwargs):
+        super().__init__(msg, *args, **kwargs)
 
 
 class Doer:
@@ -8,5 +10,8 @@ class Doer:
     def do(self, cmd: "Command") -> None:
         pass
 
-    def shutdown(self) -> None:
+    def __enter__(self):
+        pass
+
+    def __exit__(self, typ, value, tracebacks):
         pass

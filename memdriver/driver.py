@@ -1,3 +1,5 @@
+from contextlib import ExitStack
+
 from command import Command
 from engine import Engine
 from memdriver.data_log import DataLog
@@ -54,9 +56,13 @@ class Driver(Doer):
             except Exception as e:
                 raise Exception(f"{doer} init: {e}")
 
-    def shutdown(self):
-        for doer in self.doers:
-            try:
-                doer.shutdown()
-            except Exception as e:
-                raise Exception(f"{doer} shutdown: {e}")
+    def __enter__(self):
+        with ExitStack() as stack:
+            for doer in self.doers:
+                stack.enter_context(doer)
+            self._stack = stack.pop_all()
+
+        return self
+
+    def __exit__(self, typ, value, traceback):
+        self._stack.__exit__(typ, value, traceback)

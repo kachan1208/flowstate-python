@@ -25,7 +25,7 @@ class FlowGetter(Doer):
         self.flow_registry = flow_registry
 
     def do(self, cmd: Command) -> None:
-        if cmd is GetFlowCommand:
+        if not isinstance(cmd, GetFlowCommand):
             raise ErrCommandNotSupported
 
         if cmd.state_ctx.current.transition.to_id == "":

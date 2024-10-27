@@ -7,7 +7,7 @@ class Transition:
     annotations: dict
 
     def __init__(
-        self, from_id: "FlowId" = "", to_id: "FlowId" = 0, annotations: dict = {}
+        self, from_id: "FlowId" = "", to_id: "FlowId" = "", annotations: dict = {}
     ) -> None:
         self.from_id = from_id
         self.to_id = to_id

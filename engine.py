@@ -1,4 +1,7 @@
 import logging
+from contextlib import ExitStack
+from inspect import trace
+
 from doer import Doer
 from state import StateCtx
 from flow import Flow
@@ -58,6 +61,8 @@ class Engine:
             except Exception as e:
                 raise e
 
+            return
+
     def do(self, *cmds: Command) -> None:
         if len(cmds) == 0:
             raise Exception("no commands to do")
@@ -68,20 +73,20 @@ class Engine:
             except Exception as e:
                 raise e
 
-    def __do(self, cmd0: Command) -> None:
-        t = type(cmd0)
+    def __do(self, cmd: Command) -> None:
+        t = type(cmd)
         if t == ExecuteCommand:
-            if cmd0.sync:
+            if cmd.sync:
                 return
 
             try:
-                self.execute(cmd0.state_ctx)
+                self.execute(cmd.state_ctx)
             except Exception as e:
                 raise e
 
         else:
             try:
-                return self.d.do(cmd0)
+                return self.d.do(cmd)
             except Exception as e:
                 raise e
 
@@ -115,4 +120,14 @@ class Engine:
         elif typ is NoopCommand:
             return None
         else:
-            raise Exception(f"unknown command 123: {typ}")
+            raise Exception(f"unknown command: {typ}")
+
+    def __enter__(self):
+        with ExitStack() as stack:
+            stack.enter_context(self.d)
+            self._stack = stack.pop_all()
+
+        return self
+
+    def __exit__(self, typ, value, traceback):
+        self._stack.__exit__(typ, value, traceback)

@@ -5,7 +5,7 @@ from cmd_pause import paused
 
 
 def track(state_ctx: StateCtx, trkr: "Tracker"):
-    postfix: str
+    postfix = ""
     if trkr.include_state:
         if resumed(state_ctx.current):
             postfix = ":resumed"
@@ -15,13 +15,18 @@ def track(state_ctx: StateCtx, trkr: "Tracker"):
     if trkr.include_task_id:
         postfix += f"{postfix}:{state_ctx.current.id}"
 
-    trkr.visited.append(f"{state_ctx.current.transition.id}{postfix}")
+    trkr.visited.append(f"{state_ctx.current.transition.to_id}{postfix}")
 
 
 class Tracker:
     include_task_id: bool
     include_state: bool
     visited: list[str]
+
+    def __init__(self, include_task_id: bool = False, include_state: bool = False):
+        self.include_task_id = include_task_id
+        self.include_state = include_state
+        self.visited = []
 
     def visited(self) -> list[str]:
         return self.visited[:]

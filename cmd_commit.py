@@ -3,7 +3,8 @@ from state import StateCtx
 
 
 def commit(*cmds: Command) -> "CommitCommand":
-    return CommitCommand(cmds)
+    return CommitCommand(*cmds)
+
 
 class CommittableCommand:
     def committable_state_ctx(self) -> StateCtx:
@@ -12,7 +13,7 @@ class CommittableCommand:
 
 class CommitCommand(Command):
     def __init__(self, *cmds: Command):
-        self.commands = cmds
+        self.commands: [Command] = list(cmds)
 
 
 class CommitStateCtxCommand(Command):

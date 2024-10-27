@@ -16,5 +16,5 @@ class NoopCommand(Command):
 
 class DefaultNoopDoer(Doer):
     def do(self, cmd: Command):
-        if cmd is NoopCommand:
+        if not isinstance(cmd, NoopCommand):
             raise ErrCommandNotSupported
