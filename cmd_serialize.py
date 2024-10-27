@@ -23,7 +23,7 @@ class SerializeCommand(Command):
 
 class DefaultSerializerDoer(Doer):
     def do(self, cmd: Command):
-        if cmd is not SerializeCommand:
+        if not isinstance(cmd, SerializeCommand):
             raise ErrCommandNotSupported
 
         if cmd.annotation == "":

@@ -30,8 +30,8 @@ class DefaultPauseDoer(Doer):
     state_ctx: StateCtx
     flow_id: FlowId
 
-    def do(self, cmd: Command) -> None:
-        if cmd is not PauseCommand:
+    def do(self, cmd: Command) -> Exception:
+        if not isinstance(cmd, PauseCommand):
             raise ErrCommandNotSupported
 
         cmd.state_ctx.transitions.append(cmd.state_ctx.current.transition)

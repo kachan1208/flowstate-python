@@ -14,14 +14,14 @@ class State:
         annotations: dict[str, str] = None,
         labels: dict[str, str] = None,
         commited_at_unix_milli: int = 0,
-        transition: Transition = None,
+        transition: "Transition" = Transition(),
     ):
         self.id: str = id
         self.rev: int = rev
         self.annotations: dict[str, str] = annotations
         self.labels: dict[str, str] = labels
         self.commited_at_unix_milli: int = commited_at_unix_milli
-        self.transition: Transition = transition
+        self.transition: "Transition" = transition
 
     def set_commited_at(self, commited_at: datetime):
         self.commited_at_unix_milli = round(commited_at.now().timestamp() * 1000)
@@ -56,8 +56,8 @@ class StateCtx:
         self,
         current: State = None,
         commited: State = None,
-        transitions: list[Transition] = None,
-        e=None,
+        transitions: list[Transition] = [],
+        e: "Engine" = None,
     ) -> None:
         self.current = current
         self.commited = commited

@@ -9,7 +9,7 @@ class Getter(Doer):
         self.l = log
 
     def do(self, cmd: Command):
-        if cmd is not GetCommand:
+        if not isinstance(cmd, GetCommand:
             return ErrCommandNotSupported
 
         if len(cmd.labels) > 0:

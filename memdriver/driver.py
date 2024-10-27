@@ -42,7 +42,7 @@ class Driver(Doer):
         for doer in self.doers:
             try:
                 doer.do(cmd)
-            except ErrCommandNotSupported:
+            except ErrCommandNotSupported as e:
                 continue
             except Exception as e:
                 raise Exception(f"{doer} do: {e}")

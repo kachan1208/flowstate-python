@@ -14,7 +14,7 @@ class EndCommand(Command):
 
 class DefaultEndDoer(Doer):
     def do(self, cmd: Command) -> None:
-        if cmd is not EndCommand:
+        if not isinstance(cmd, EndCommand):
             raise ErrCommandNotSupported
 
         cmd.state_ctx.transitions.append(cmd.state_ctx.current.transition)

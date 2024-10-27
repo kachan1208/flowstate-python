@@ -23,7 +23,7 @@ class DeserializeCommand(Command):
 
 class DefaultDeserializeDoer(Doer):
     def do(self, cmd: Command):
-        if cmd is not DeserializeCommand:
+        if not isinstance(cmd, DeserializeCommand):
             raise ErrCommandNotSupported
 
         serializedState = cmd.state_ctx.current.state.annotations[cmd.annotation]
