@@ -1,4 +1,3 @@
-from engine import Engine
 from transition import Transition
 from datetime import datetime
 
@@ -8,13 +7,21 @@ StateId = str
 
 
 class State:
-    def __init__(self) -> None:
-        self.id: str = ""
-        self.rev: int = 0
-        self.annotations: dict[str, str]
-        self.labels: dict[str, str]
-        self.commited_at_unix_milli: int = 0
-        self.transition: Transition = Transition()
+    def __init__(
+        self,
+        id: str = "",
+        rev: int = 0,
+        annotations: dict[str, str] = None,
+        labels: dict[str, str] = None,
+        commited_at_unix_milli: int = 0,
+        transition: "Transition" = Transition(),
+    ):
+        self.id: str = id
+        self.rev: int = rev
+        self.annotations: dict[str, str] = annotations
+        self.labels: dict[str, str] = labels
+        self.commited_at_unix_milli: int = commited_at_unix_milli
+        self.transition: "Transition" = transition
 
     def set_commited_at(self, commited_at: datetime):
         self.commited_at_unix_milli = round(commited_at.now().timestamp() * 1000)
@@ -45,13 +52,12 @@ class State:
 
 
 class StateCtx:
-    current: State
-    commited: State
-    transitions: list[Transition]
-    e: Engine
-
     def __init__(
-        self, current: State = None, commited: State = None, transitions: list[Transition] = None, e: Engine = None
+        self,
+        current: State = None,
+        commited: State = None,
+        transitions: list[Transition] = [],
+        e: "Engine" = None,
     ) -> None:
         self.current = current
         self.commited = commited

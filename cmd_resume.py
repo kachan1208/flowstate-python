@@ -24,7 +24,7 @@ class ResumeCommand(Command):
 
 class DefaultResumeDoer(Doer):
     def do(self, cmd: Command) -> None:
-        if cmd is not ResumeCommand:
+        if not isinstance(cmd, ResumeCommand):
             raise ErrCommandNotSupported
 
         cmd.state_ctx.transitions.append(cmd.state_ctx.current.transition)

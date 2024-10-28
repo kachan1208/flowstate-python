@@ -23,7 +23,7 @@ class ReferenceDataCommand(Command):
 
 class DefaultReferenceDataDoer(Doer):
     def do(self, cmd: Command):
-        if cmd is ReferenceDataCommand:
+        if not isinstance(cmd, ReferenceDataCommand):
             raise ErrCommandNotSupported
 
         if cmd.data.id == "":
