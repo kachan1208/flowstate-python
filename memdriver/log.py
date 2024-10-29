@@ -1,5 +1,5 @@
 from data import Data, DataId
-from state import StateCtx
+from state import State, StateCtx
 from datetime import datetime
 from queue import Queue
 from transition import Transition
@@ -79,3 +79,19 @@ class Log:
 
     def subscribe_commit(self, q: Queue):
         self.listeners.append(q)
+
+
+def match_labels(state: "State", or_labels: list[dict[str, str]]) -> bool:
+    if len(or_labels) == 0:
+        return True
+
+    for _, labels in or_labels:
+        for k, v in labels:
+            if state.labels[k] != v:
+                break
+        else:
+            continue
+
+        return True
+
+    return False
