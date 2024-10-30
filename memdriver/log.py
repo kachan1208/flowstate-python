@@ -74,11 +74,34 @@ class Log:
             if e.commited.id == id and e.commited.rev == rev:
                 return e.copy_to(StateCtx())
 
-    def get_latest_by_labels(self, labels: list[str]) -> (Data, int):
-        pass
+    def get_latest_by_labels(self, labels: list[str]) -> ("StateCtx", int):
+        for e in reversed(self.entries):
+            if match_labels(e.commited, labels):
+                return e.copy_to(StateCtx()), e.commited.rev
+
+        return None, 0
+
+    def entries(self, since: int, limit: int) -> (list["StateCtx"], int):
+        if limit == 0:
+            return None, since
+
+        entries: list[StateCtx] = []
+        for e in self.entries:
+            if e.commited.rev <= since:
+                continue
+
+            entries.append(e.copy_to(StateCtx()))
+            since = e.commited.rev
+            if len(entries) == limit:
+                break
+
+        return entries, since
 
     def subscribe_commit(self, q: Queue):
         self.listeners.append(q)
+
+    def unsubscribe_commit(self, q: Queue):
+        self.listeners.remove(q)
 
 
 def match_labels(state: "State", or_labels: list[dict[str, str]]) -> bool:
