@@ -2,6 +2,7 @@ from state import StateCtx, State, StateAnnotation
 from command import Command
 from flow import FlowId
 from doer import Doer, ErrCommandNotSupported
+from cmd_commit import CommittableCommand
 from transition import Transition
 
 
@@ -13,7 +14,7 @@ def pause(state_ctx: StateCtx) -> "PauseCommand":
     return PauseCommand(state_ctx, state_ctx.current.transition.to_id)
 
 
-class PauseCommand(Command):
+class PauseCommand(Command, CommittableCommand):
     def __init__(self, state_ctx: StateCtx, flow_id: FlowId):
         self.state_ctx: StateCtx = state_ctx
         self.flow_id: FlowId = flow_id

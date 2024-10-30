@@ -11,8 +11,8 @@ class State:
         self,
         id: str = "",
         rev: int = 0,
-        annotations: dict[str, str] = None,
-        labels: dict[str, str] = None,
+        annotations: dict[str, str] = {},
+        labels: dict[str, str] = {},
         commited_at_unix_milli: int = 0,
         transition: "Transition" = Transition(),
     ):
@@ -54,9 +54,9 @@ class State:
 class StateCtx:
     def __init__(
         self,
-        current: State = None,
-        commited: State = None,
-        transitions: list[Transition] = [],
+        current: State = State(),
+        commited: State = State(),
+        transitions: list["Transition"] = list["Transition"],
         e: "Engine" = None,
     ) -> None:
         self.current = current

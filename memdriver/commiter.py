@@ -22,14 +22,13 @@ class Commiter(Doer):
         if len(cmd.commands) == 0:
             raise Exception("no commands to commit")
 
-        for _, c in cmd.commands:
+        for c in cmd.commands:
             if isinstance(c, CommitCommand):
                 raise Exception("commit command not allowed inside another commit")
 
             if isinstance(c, ExecuteCommand):
                 raise Exception("execute command not allowed inside commit")
 
-        for _, c in cmd.commands:
             try:
                 self.e.d.do(c)
             except Exception as e:

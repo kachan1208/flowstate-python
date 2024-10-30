@@ -47,7 +47,7 @@ class Log:
         ]
 
         self.changes = sorted(self.changes, key=lambda x: x.current.rev)
-        for _, stateCtx in self.changes:
+        for stateCtx in self.changes:
             self.entries.append(stateCtx)
 
         rev = 0
@@ -65,6 +65,9 @@ class Log:
         self.changes = list[StateCtx]
 
     def get_latest_by_id(self, id: DataId) -> ("StateCtx", int):
+        if len(self.entries) == 0:
+            return None, 0
+
         for e in reversed(self.entries):
             if e.commited.id == id:
                 return e.copy_to(StateCtx()), e.commited.rev

@@ -5,6 +5,7 @@ from engine import Engine
 from memdriver.data_log import DataLog
 from memdriver.registry import FlowRegistry, FlowGetter
 from memdriver.log import Log
+from memdriver.commiter import Commiter
 from doer import Doer, ErrCommandNotSupported
 from cmd_transit import DefaultTransitDoer
 from cmd_pause import DefaultPauseDoer
@@ -38,6 +39,7 @@ class Driver(Doer):
             DefaultReferenceDataDoer(),
             DataLog(),
             FlowGetter(self.flow_registry),
+            Commiter(self.l),
         ]
 
     def do(self, cmd: Command):

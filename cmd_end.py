@@ -1,10 +1,11 @@
 from state import StateCtx, State, StateAnnotation
 from doer import Doer, ErrCommandNotSupported
 from command import Command
+from cmd_commit import CommittableCommand
 from transition import Transition
 
 
-class EndCommand(Command):
+class EndCommand(Command, CommittableCommand):
     def __init__(self, state_ctx: StateCtx) -> None:
         self.state_ctx = state_ctx
 
