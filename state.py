@@ -1,3 +1,5 @@
+from encodings.punycode import selective_find
+
 from transition import Transition
 from datetime import datetime
 
@@ -56,7 +58,7 @@ class StateCtx:
         self,
         current: State = State(),
         commited: State = State(),
-        transitions: list["Transition"] = list["Transition"],
+        transitions: list["Transition"] = [],
         e: "Engine" = None,
     ) -> None:
         self.current = current
@@ -68,11 +70,7 @@ class StateCtx:
         self.current.copy_to(to.current)
         self.commited.copy_to(to.commited)
 
-        if len(to.transitions) >= len(self.transitions):
-            to.transitions = to.transitions[: len(self.transitions)]
-        else:
-            to.transitions = [Transition() for _ in range(len(self.transitions))]
-
+        to.transitions = [Transition()] * len(self.transitions)
         for idx in range(len(self.transitions)):
             self.transitions[idx].copy_to(to.transitions[idx])
 

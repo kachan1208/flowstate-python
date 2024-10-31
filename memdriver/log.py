@@ -27,7 +27,7 @@ class Log:
         state_ctx.copy_to(commited_t)
         commited_t.current.set_commited_at(datetime.now())
         commited_t.current.copy_to(commited_t.commited)
-        commited_t.transitions = list[Transition]
+        commited_t.transitions = []
 
         self.rev += 1
         commited_t.commited.rev = self.rev
@@ -37,7 +37,7 @@ class Log:
 
         commited_t.commited.copy_to(state_ctx.current)
         commited_t.commited.copy_to(state_ctx.commited)
-        state_ctx.transitions = list[Transition]
+        state_ctx.transitions = []
 
     def commit(self):
         sorted_changes = sorted(self.changes, key=lambda x: x.current.id)
@@ -54,7 +54,7 @@ class Log:
         if len(self.entries) > 0:
             rev = self.entries[-1].current.rev
 
-        self.changes = list[StateCtx]
+        self.changes = []
         for q in self.listeners:
             if q.full():
                 q.get()
@@ -62,7 +62,7 @@ class Log:
             q.put(rev)
 
     def rollback(self):
-        self.changes = list[StateCtx]
+        self.changes = []
 
     def get_latest_by_id(self, id: DataId) -> ("StateCtx", int):
         if len(self.entries) == 0:
@@ -105,6 +105,12 @@ class Log:
 
     def unsubscribe_commit(self, q: Queue):
         self.listeners.remove(q)
+
+    def __enter__(self):
+        pass
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        self.rollback()
 
 
 def match_labels(state: "State", or_labels: list[dict[str, str]]) -> bool:
