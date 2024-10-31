@@ -42,11 +42,11 @@ class Engine:
 
             try:
                 f = self.get_flow(state_ctx)
-                cmd0 = f.execute(state_ctx, self)
-                if cmd0 is ExecuteCommand:
-                    cmd0.sync = True
+                cmd = f.execute(state_ctx, self)
+                if cmd is ExecuteCommand:
+                    cmd.sync = True
 
-                self.do(cmd0)
+                self.do(cmd)
             except ErrCommitConflict as e:
                 logging.info(f"engine: execute: {e}\n")
                 return

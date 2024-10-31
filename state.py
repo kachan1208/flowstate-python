@@ -13,17 +13,25 @@ class State:
         self,
         id: str = "",
         rev: int = 0,
-        annotations: dict[str, str] = {},
-        labels: dict[str, str] = {},
+        annotations: dict[str, str] = None,
+        labels: dict[str, str] = None,
         commited_at_unix_milli: int = 0,
-        transition: "Transition" = Transition(),
+        transition: "Transition" = None,
     ):
         self.id: str = id
         self.rev: int = rev
         self.annotations: dict[str, str] = annotations
+        if self.annotations == None:
+            self.annotations = {}
+
         self.labels: dict[str, str] = labels
+        if self.labels == None:
+            self.labels = {}
+
         self.commited_at_unix_milli: int = commited_at_unix_milli
         self.transition: "Transition" = transition
+        if self.transition == None:
+            self.transition = Transition()
 
     def set_commited_at(self, commited_at: datetime):
         self.commited_at_unix_milli = round(commited_at.now().timestamp() * 1000)
@@ -56,15 +64,24 @@ class State:
 class StateCtx:
     def __init__(
         self,
-        current: State = State(),
-        commited: State = State(),
-        transitions: list["Transition"] = [],
+        current: "State" = None,
+        commited: "State" = None,
+        transitions: list["Transition"] = None,
         e: "Engine" = None,
     ) -> None:
-        self.current = current
-        self.commited = commited
-        self.transitions = transitions
-        self.e = e
+        self.current: "State" = current
+        if self.current == None:
+            self.current = State()
+
+        self.commited: "State" = commited
+        if self.commited == None:
+            self.commited = State()
+
+        self.transitions: list["Transition"] = transitions
+        if self.transitions == None:
+            self.transitions = []
+
+        self.e: "Engine" = e
 
     def copy_to(self, to: "StateCtx") -> "StateCtx":
         self.current.copy_to(to.current)
