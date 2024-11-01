@@ -16,6 +16,10 @@ class CommitCommand(Command):
         self.commands: [Command] = list(cmds)
 
 
+def commit_state_ctx(state_ctx: StateCtx) -> "CommitStateCtxCommand":
+    return CommitStateCtxCommand(state_ctx)
+
+
 class CommitStateCtxCommand(Command):
     def __init__(self, state_ctx: StateCtx):
         self.state_ctx = state_ctx

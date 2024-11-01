@@ -54,7 +54,7 @@ class Engine:
                 raise e
 
             try:
-                next_state_ctx = self.continue_execution(cmd0)
+                next_state_ctx = self.continue_execution(cmd)
                 if next_state_ctx is not None:
                     state_ctx = next_state_ctx
                     continue

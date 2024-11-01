@@ -51,6 +51,7 @@ class Commiter(Doer):
             try:
                 self.l.commit()
             except Exception as e:
+                self.l.rollback()
                 raise e
 
     def init(self, e: "Engine"):

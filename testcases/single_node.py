@@ -11,7 +11,7 @@ from cmd_transit import transit
 
 def test_single_node():
     driver = Driver()
-    flow_registry = FlowRegistry()
+    flow_registry = driver.flow_registry
     tracker = Tracker()
 
     def first(state_ctx: StateCtx, _: Engine) -> Command:
