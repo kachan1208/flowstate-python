@@ -77,7 +77,7 @@ class Log:
             if e.commited.id == id and e.commited.rev == rev:
                 return e.copy_to(StateCtx())
 
-    def get_latest_by_labels(self, labels: list[str]) -> ("StateCtx", int):
+    def get_latest_by_labels(self, labels: list[dict[str, str]]) -> ("StateCtx", int):
         for e in reversed(self.entries):
             if match_labels(e.commited, labels):
                 return e.copy_to(StateCtx()), e.commited.rev
@@ -117,11 +117,18 @@ def match_labels(state: "State", or_labels: list[dict[str, str]]) -> bool:
     if len(or_labels) == 0:
         return True
 
-    for _, labels in or_labels:
-        for k, v in labels:
-            if state.labels[k] != v:
-                break
-        else:
+    if len(state.labels) == 0:
+        return False
+
+    for labels in or_labels:
+        found: bool = True
+
+        for k, v in labels.items():
+            label = state.labels.get(k)
+            if label is None or label != v:
+                found = False
+
+        if not found:
             continue
 
         return True

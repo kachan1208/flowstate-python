@@ -87,7 +87,7 @@ class StateCtx:
         self.current.copy_to(to.current)
         self.commited.copy_to(to.commited)
 
-        to.transitions = [Transition()] * len(self.transitions)
+        to.transitions = [Transition() for _ in self.transitions]
         for idx in range(len(self.transitions)):
             self.transitions[idx].copy_to(to.transitions[idx])
 

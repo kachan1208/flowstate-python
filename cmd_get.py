@@ -6,13 +6,17 @@ def get_by_id(state_ctx: StateCtx, id: StateId, rev: int) -> "GetCommand":
     return GetCommand(state_ctx, id).with_id(id).with_rev(rev)
 
 
+def get_by_labels(state_ctx: StateCtx, labels: dict[str, str]) -> "GetCommand":
+    return GetCommand(state_ctx).with_labels(labels)
+
+
 class GetCommand(Command):
     state_ctx: StateCtx
     id: StateId
     rev: int
     labels: dict[str, str]
 
-    def __init__(self, state_ctx: StateCtx, state_id: StateId):
+    def __init__(self, state_ctx: StateCtx, state_id: StateId = 0):
         self.state_ctx = state_ctx
         self.stateId = state_id
         self.id: StateId

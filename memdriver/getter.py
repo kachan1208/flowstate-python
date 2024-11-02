@@ -13,7 +13,7 @@ class Getter(Doer):
             return ErrCommandNotSupported
 
         if len(cmd.labels) > 0:
-            state_ctx, _ = self.l.get_latest_by_labels(cmd.labels)
+            state_ctx, _ = self.l.get_latest_by_labels([cmd.labels])
             if state_ctx is None:
                 raise Exception(f"state not found by labels {cmd.labels}")
             state_ctx.copy_to(cmd.state_ctx)
