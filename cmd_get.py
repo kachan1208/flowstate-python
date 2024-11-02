@@ -10,7 +10,7 @@ class GetCommand(Command):
     state_ctx: StateCtx
     id: StateId
     rev: int
-    labels = dict[str, str]
+    labels: dict[str, str]
 
     def __init__(self, state_ctx: StateCtx, state_id: StateId):
         self.state_ctx = state_ctx
@@ -19,7 +19,7 @@ class GetCommand(Command):
         self.rev: int
 
     def with_id(self, id: StateId) -> "GetCommand":
-        self.labels = dict[str, str]
+        self.labels: dict[str, str] = {}
         self.id = id
         return self
 

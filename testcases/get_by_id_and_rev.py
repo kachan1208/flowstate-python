@@ -36,4 +36,16 @@ def test_get_by_id_and_rev():
         )
     )
 
+    assert expected_state_ctx.current.annotations == found_state_ctx.current.annotations
+    assert expected_state_ctx.current.id == found_state_ctx.current.id
+    assert expected_state_ctx.current.rev == found_state_ctx.current.rev
+    assert expected_state_ctx.current.labels == found_state_ctx.current.labels
+
+    assert (
+        expected_state_ctx.commited.annotations == found_state_ctx.commited.annotations
+    )
     assert expected_state_ctx.commited.id == found_state_ctx.commited.id
+    assert expected_state_ctx.commited.rev == found_state_ctx.commited.rev
+    assert expected_state_ctx.commited.labels == found_state_ctx.commited.labels
+
+    assert expected_state_ctx.transitions == found_state_ctx.transitions
