@@ -54,7 +54,7 @@ def test_data_store_get():
                 annotation="aDataKey",
             ),
             get_data(d=act_data),
-            transit(state_ctx, "end"),
+            transit(state_ctx, "finish"),
         )
 
         return execute(state_ctx)

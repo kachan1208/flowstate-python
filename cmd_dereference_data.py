@@ -36,7 +36,7 @@ class DefaultDereferenceDataDoer(Doer):
         if splits[1] == "":
             raise Exception("serialized data ID is empty")
 
-        if splits[2] != "":
+        if splits[2] == "":
             raise Exception("serialized data revision is empty")
 
         try:
