@@ -43,7 +43,7 @@ class Engine:
             try:
                 f = self.get_flow(state_ctx)
                 cmd = f.execute(state_ctx, self)
-                if cmd is ExecuteCommand:
+                if isinstance(cmd, ExecuteCommand):
                     cmd.sync = True
 
                 self.do(cmd)
@@ -74,8 +74,7 @@ class Engine:
                 raise e
 
     def __do(self, cmd: Command) -> None:
-        t = type(cmd)
-        if t == ExecuteCommand:
+        if isinstance(cmd, ExecuteCommand):
             if cmd.sync:
                 return
 

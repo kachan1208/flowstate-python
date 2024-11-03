@@ -51,7 +51,7 @@ class Driver(Doer):
             except ErrCommandNotSupported as e:
                 continue
             except Exception as e:
-                raise Exception(f"{doer} do: {e}")
+                raise ErrNotFound(f"{doer} do: {e}")
 
     def init(self, e: Engine):
         for doer in self.doers:
@@ -70,3 +70,7 @@ class Driver(Doer):
 
     def __exit__(self, typ, value, traceback):
         self._stack.__exit__(typ, value, traceback)
+
+
+class ErrNotFound(Exception):
+    pass

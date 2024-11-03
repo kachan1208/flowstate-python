@@ -1,5 +1,4 @@
 from flow import FlowFunc
-from memdriver.registry import FlowRegistry
 from memdriver.driver import Driver
 from command import Command
 from state import StateCtx, State
