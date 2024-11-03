@@ -10,14 +10,22 @@ class Log:
     def __init__(
         self,
         rev: int = 0,
-        entries: list[StateCtx] = [],
-        changes: list[StateCtx] = [],
-        listeners: list[Queue] = [],
+        entries: list[StateCtx] = None,
+        changes: list[StateCtx] = None,
+        listeners: list[Queue] = None,
     ):
         self.rev: int = rev
         self.entries: list[StateCtx] = entries
+        if self.entries is None:
+            self.entries = []
+
         self.changes: list[StateCtx] = changes
+        if self.changes is None:
+            self.changes = []
+
         self.listeners: list[Queue] = listeners
+        if self.listeners is None:
+            self.listeners = []
 
     def append(self, state_ctx: StateCtx):
         commited_t, _ = self.get_latest_by_id(state_ctx.current.id)

@@ -5,7 +5,7 @@ from state import StateCtx, State
 from engine import Engine
 
 
-def test_get_latest_by_id():
+def test_get_latest_by_label():
     driver = Driver()
     e = Engine(driver)
 
