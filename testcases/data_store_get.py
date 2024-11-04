@@ -25,7 +25,7 @@ def test_data_store_get():
 
         d = Data(
             id="aTID",
-            b=bytearray("foo", "utf-8"),
+            b=bytearray(b"foo"),
         )
 
         e.do(
@@ -71,7 +71,7 @@ def test_data_store_get():
     exp_data = Data(
         id="aTID",
         rev=1,
-        b=bytearray("foo", "utf-8"),
+        b=bytearray(b"foo"),
     )
 
     ctx = StateCtx(current=State(id="aTID"))

@@ -21,16 +21,16 @@ class State:
         self.id: str = id
         self.rev: int = rev
         self.annotations: dict[str, str] = annotations
-        if self.annotations == None:
+        if self.annotations is None:
             self.annotations = {}
 
         self.labels: dict[str, str] = labels
-        if self.labels == None:
+        if self.labels is None:
             self.labels = {}
 
         self.commited_at_unix_milli: int = commited_at_unix_milli
         self.transition: "Transition" = transition
-        if self.transition == None:
+        if self.transition is None:
             self.transition = Transition()
 
     def set_commited_at(self, commited_at: datetime):
@@ -70,15 +70,15 @@ class StateCtx:
         e: "Engine" = None,
     ) -> None:
         self.current: "State" = current
-        if self.current == None:
+        if self.current is None:
             self.current = State()
 
         self.commited: "State" = commited
-        if self.commited == None:
+        if self.commited is None:
             self.commited = State()
 
         self.transitions: list["Transition"] = transitions
-        if self.transitions == None:
+        if self.transitions is None:
             self.transitions = []
 
         self.e: "Engine" = e

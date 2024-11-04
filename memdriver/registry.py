@@ -9,7 +9,7 @@ from cmd_get_flow import GetFlowCommand
 class FlowRegistry(Doer):
     def __init__(self, flows: dict[FlowId, Flow] = None):
         self.flows: dict[FlowId, Flow] = flows
-        if self.flows == None:
+        if self.flows is None:
             self.flows = {}
 
     def set_flow(self, id: FlowId, flow: Flow):
