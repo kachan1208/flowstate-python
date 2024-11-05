@@ -1,5 +1,4 @@
 from flow import FlowFunc
-from memdriver.registry import FlowRegistry
 from memdriver.driver import Driver
 from command import Command
 from state import StateCtx, State
@@ -11,7 +10,7 @@ from cmd_transit import transit
 
 def test_single_node():
     driver = Driver()
-    flow_registry = FlowRegistry()
+    flow_registry = driver.flow_registry
     tracker = Tracker()
 
     def first(state_ctx: StateCtx, _: Engine) -> Command:

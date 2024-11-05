@@ -11,14 +11,10 @@ def dereference_data(
 
 
 class DereferenceDataCommand(Command):
-    state_ctx: StateCtx
-    data: Data
-    annotation: str
-
     def __init__(self, state_ctx: StateCtx, data: Data, annotation: str):
-        self.state_ctx = state_ctx
-        self.data = data
-        self.annotation = annotation
+        self.state_ctx: StateCtx = state_ctx
+        self.data: Data = data
+        self.annotation: str = annotation
 
 
 class DefaultDereferenceDataDoer(Doer):
@@ -40,7 +36,7 @@ class DefaultDereferenceDataDoer(Doer):
         if splits[1] == "":
             raise Exception("serialized data ID is empty")
 
-        if splits[2] != "":
+        if splits[2] == "":
             raise Exception("serialized data revision is empty")
 
         try:

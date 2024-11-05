@@ -1,3 +1,5 @@
+from encodings.punycode import selective_find
+
 from transition import Transition
 from datetime import datetime
 
@@ -11,17 +13,25 @@ class State:
         self,
         id: str = "",
         rev: int = 0,
-        annotations: dict[str, str] = {},
-        labels: dict[str, str] = {},
+        annotations: dict[str, str] = None,
+        labels: dict[str, str] = None,
         commited_at_unix_milli: int = 0,
-        transition: "Transition" = Transition(),
+        transition: "Transition" = None,
     ):
         self.id: str = id
         self.rev: int = rev
         self.annotations: dict[str, str] = annotations
+        if self.annotations is None:
+            self.annotations = {}
+
         self.labels: dict[str, str] = labels
+        if self.labels is None:
+            self.labels = {}
+
         self.commited_at_unix_milli: int = commited_at_unix_milli
         self.transition: "Transition" = transition
+        if self.transition is None:
+            self.transition = Transition()
 
     def set_commited_at(self, commited_at: datetime):
         self.commited_at_unix_milli = round(commited_at.now().timestamp() * 1000)
@@ -54,25 +64,30 @@ class State:
 class StateCtx:
     def __init__(
         self,
-        current: State = State(),
-        commited: State = State(),
-        transitions: list["Transition"] = list["Transition"],
+        current: "State" = None,
+        commited: "State" = None,
+        transitions: list["Transition"] = None,
         e: "Engine" = None,
     ) -> None:
-        self.current = current
-        self.commited = commited
-        self.transitions = transitions
-        self.e = e
+        self.current: "State" = current
+        if self.current is None:
+            self.current = State()
+
+        self.commited: "State" = commited
+        if self.commited is None:
+            self.commited = State()
+
+        self.transitions: list["Transition"] = transitions
+        if self.transitions is None:
+            self.transitions = []
+
+        self.e: "Engine" = e
 
     def copy_to(self, to: "StateCtx") -> "StateCtx":
         self.current.copy_to(to.current)
         self.commited.copy_to(to.commited)
 
-        if len(to.transitions) >= len(self.transitions):
-            to.transitions = to.transitions[: len(self.transitions)]
-        else:
-            to.transitions = [Transition() for _ in range(len(self.transitions))]
-
+        to.transitions = [Transition() for _ in self.transitions]
         for idx in range(len(self.transitions)):
             self.transitions[idx].copy_to(to.transitions[idx])
 

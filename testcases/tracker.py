@@ -19,14 +19,10 @@ def track(state_ctx: StateCtx, trkr: "Tracker"):
 
 
 class Tracker:
-    include_task_id: bool
-    include_state: bool
-    visited: list[str]
-
     def __init__(self, include_task_id: bool = False, include_state: bool = False):
         self.include_task_id = include_task_id
         self.include_state = include_state
-        self.visited = []
+        self.visited: list[str] = []
 
     def visited(self) -> list[str]:
         return self.visited[:]
@@ -36,7 +32,7 @@ class Tracker:
 
     def wait_sorted_visited_equal(
         self,
-        expVisited: list[str],
+        exp_visited: list[str],
         wait: int,
     ) -> list[str]:
         visited: list[str]
@@ -44,11 +40,11 @@ class Tracker:
         def condition():
             nonlocal visited
             visited = self.visited_sorted()
-            return visited == expVisited
+            return visited == exp_visited
 
         assert_eventually(func=condition, timeout=wait, interval=0.05)
 
-        assert expVisited == visited
+        assert exp_visited == visited
         return visited
 
     def wait_visited_equal(

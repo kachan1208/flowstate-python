@@ -4,7 +4,7 @@ from command import Command
 
 class ExecuteCommand(Command):
     def __init__(self, state_ctx: StateCtx):
-        self.sync: bool
+        self.sync: bool = False
         self.state_ctx = state_ctx
 
 

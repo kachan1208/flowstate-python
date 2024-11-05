@@ -6,8 +6,9 @@ from doer import Doer, ErrCommandNotSupported
 
 
 class DataLog(Doer):
-    rev: int
-    entries: list[Data]
+    def __init__(self):
+        self.entries = []
+        self.rev = 0
 
     def do(self, cmd: Command):
         typ = type(cmd)

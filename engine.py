@@ -42,11 +42,11 @@ class Engine:
 
             try:
                 f = self.get_flow(state_ctx)
-                cmd0 = f.execute(state_ctx, self)
-                if cmd0 is ExecuteCommand:
-                    cmd0.sync = True
+                cmd = f.execute(state_ctx, self)
+                if isinstance(cmd, ExecuteCommand):
+                    cmd.sync = True
 
-                self.do(cmd0)
+                self.do(cmd)
             except ErrCommitConflict as e:
                 logging.info(f"engine: execute: {e}\n")
                 return
@@ -54,7 +54,7 @@ class Engine:
                 raise e
 
             try:
-                next_state_ctx = self.continue_execution(cmd0)
+                next_state_ctx = self.continue_execution(cmd)
                 if next_state_ctx is not None:
                     state_ctx = next_state_ctx
                     continue
@@ -74,8 +74,7 @@ class Engine:
                 raise e
 
     def __do(self, cmd: Command) -> None:
-        t = type(cmd)
-        if t == ExecuteCommand:
+        if isinstance(cmd, ExecuteCommand):
             if cmd.sync:
                 return
 

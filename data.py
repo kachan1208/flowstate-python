@@ -2,11 +2,7 @@ DataId = str
 
 
 class Data:
-    id: DataId
-    rev: int
-    b: bytearray
-
-    def __init__(self, id: DataId, rev: int, b: bytearray):
+    def __init__(self, id: DataId = 0, rev: int = 0, b: bytearray = bytearray()):
         self.id = id
         self.rev = rev
         self.b = b
@@ -21,5 +17,5 @@ class Data:
     def __copy__(self):
         return None
 
-    def __deepcopy__(self, memodict={}):
+    def __deepcopy__(self, memodict):
         return None
