@@ -1,6 +1,5 @@
 import logging
 from contextlib import ExitStack
-from inspect import trace
 
 from doer import Doer
 from state import StateCtx

@@ -1,3 +1,4 @@
+import json
 from flow import FlowId
 
 
@@ -25,3 +26,13 @@ class Transition:
 
     def string(self) -> str:
         return f"{self.from_id} -> {self.to_id}"
+
+    def to_json(self) -> bytes:
+        return bytes(json.dumps(self.json_fields()), "utf-8")
+
+    def json_fields(self) -> dict:
+        return {
+            "from_id": str(self.from_id),
+            "to_id": str(self.to_id),
+            "annotations": self.annotations,
+        }

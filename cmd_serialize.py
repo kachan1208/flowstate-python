@@ -1,7 +1,7 @@
-import json
+import pickle
 import base64
 
-from state import StateCtx, State, StateAnnotation
+from state import StateCtx, State
 from doer import Doer, ErrCommandNotSupported
 from command import Command
 
@@ -29,11 +29,11 @@ class DefaultSerializerDoer(Doer):
         if cmd.annotation == "":
             raise Exception("store annotation name empty")
 
-        if cmd.state_ctx.current.annotations[cmd.annotation] != "":
+        if cmd.state_ctx.current.annotations.get(cmd.annotation) is not None:
             raise Exception("store annotation already set")
 
         try:
-            b = json.JSONEncoder().encode(cmd.serializable_state_ctx)
+            b = cmd.serializable_state_ctx.to_json()
         except Exception as e:
             raise e("json encode prev state ctx")
 

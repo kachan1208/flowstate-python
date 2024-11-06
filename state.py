@@ -1,5 +1,4 @@
-from encodings.punycode import selective_find
-
+import json
 from transition import Transition
 from datetime import datetime
 
@@ -60,6 +59,19 @@ class State:
     def set_label(self, name: str, value: str):
         self.labels[name] = value
 
+    def to_json(self) -> bytes:
+        return bytes(json.dumps(self.json_fields()), "utf-8")
+
+    def json_fields(self) -> dict:
+        return {
+            "id": self.id,
+            "rev": self.rev,
+            "annotations": self.annotations,
+            "labels": self.labels,
+            "commited_at_unix_milli": self.commited_at_unix_milli,
+            "transition": self.transition.json_fields(),
+        }
+
 
 class StateCtx:
     def __init__(
@@ -82,6 +94,18 @@ class StateCtx:
             self.transitions = []
 
         self.e: "Engine" = e
+
+    def to_json(self) -> bytes:
+        return bytes(json.dumps(self.json_fields()), "utf-8")
+
+    def json_fields(self) -> dict:
+        return {
+            "current": self.current.json_fields(),
+            "commited": self.commited.json_fields(),
+            "transitions": [
+                transition.json_fields() for transition in self.transitions
+            ],
+        }
 
     def copy_to(self, to: "StateCtx") -> "StateCtx":
         self.current.copy_to(to.current)
