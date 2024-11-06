@@ -5,7 +5,7 @@ from transition import Transition
 
 
 def resumed(state: State) -> bool:
-    return state.transition.annotations[StateAnnotation] == "resumed"
+    return state.transition.annotations.get(StateAnnotation) == "resumed"
 
 
 def resume(state_ctx: StateCtx) -> "ResumeCommand":

@@ -26,8 +26,8 @@ class DefaultDeserializeDoer(Doer):
         if not isinstance(cmd, DeserializeCommand):
             raise ErrCommandNotSupported
 
-        serializedState = cmd.state_ctx.current.state.annotations[cmd.annotation]
-        if serializedState == "":
+        serializedState = cmd.state_ctx.current.annotations.get(cmd.annotation)
+        if serializedState is None or serializedState is "":
             raise Exception("store annotation value empty")
 
         try:
