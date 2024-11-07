@@ -54,8 +54,8 @@ class DelayCommand(Command):
             next_ts.set_annotation(StateAnnotation, "resumed")
 
         next_ts.set_annotation(DelayAtAnnotation, time_rfc3339micro())
-        next_ts.set_annotation(DelayDurationAnnotation, self.duration)
-        next_ts.set_annotation(DelayCommitAnnotation, self.commit)
+        next_ts.set_annotation(DelayDurationAnnotation, str(self.duration))
+        next_ts.set_annotation(DelayCommitAnnotation, str(self.commit))
 
         delayed_state_ctx.current.transition = next_ts
         self.delay_state_ctx = delayed_state_ctx
