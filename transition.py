@@ -36,3 +36,10 @@ class Transition:
             "to_id": str(self.to_id),
             "annotations": self.annotations,
         }
+
+    def from_dict(self, data: dict) -> "Transition":
+        self.from_id = data["from_id"]
+        self.to_id = data["to_id"]
+        self.annotations = data["annotations"]
+
+        return self

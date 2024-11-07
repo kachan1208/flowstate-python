@@ -72,6 +72,16 @@ class State:
             "transition": self.transition.json_fields(),
         }
 
+    def from_dict(self, data: dict) -> "State":
+        self.id = data["id"]
+        self.rev = data["rev"]
+        self.annotations = data["annotations"]
+        self.labels = data["labels"]
+        self.commited_at_unix_milli = data["commited_at_unix_milli"]
+        self.transition = Transition().from_dict(data["transition"])
+
+        return self
+
 
 class StateCtx:
     def __init__(
@@ -106,6 +116,14 @@ class StateCtx:
                 transition.json_fields() for transition in self.transitions
             ],
         }
+
+    def from_dict(self, data: dict) -> "StateCtx":
+        self.current = State().from_dict(data["current"])
+        self.commited = State().from_dict(data["commited"])
+        self.transitions = [
+            Transition().from_dict(transition) for transition in data["transitions"]
+        ]
+        return self
 
     def copy_to(self, to: "StateCtx") -> "StateCtx":
         self.current.copy_to(to.current)
