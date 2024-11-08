@@ -9,6 +9,7 @@ readme = "README.md"
 python = "^3.12"
 aiohttp = "^3.10.10"
 pytest = "^8.3.3"
+croniter = "^5.0.1"
 
 
 [build-system]
