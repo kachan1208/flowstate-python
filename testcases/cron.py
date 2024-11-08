@@ -40,7 +40,7 @@ def test_cron():
             cron_state_ctx.current.set_annotation("error", "task flow id is empty")
             return commit(end(cron_state_ctx))
 
-        next_times = list(*cron.all_next(start_time=time.time()))
+        next_times = [cron.get_next() for i in range(3)]
         if time.time() < next_times[0] < time.time() + 1:
             task_state_ctx = StateCtx(
                 current=State(
@@ -100,6 +100,4 @@ def test_cron():
         e.do(commit(transit(state_ctx, "cron")))
         e.execute(state_ctx)
 
-    assert tracker.wait_visited_equal(
-        ["cron", "task", "cron", "task", "cron", "task"], 10
-    )
+    assert tracker.visited == ["cron", "task", "cron", "task", "cron", "task"]
