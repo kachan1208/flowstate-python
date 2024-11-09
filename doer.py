@@ -7,7 +7,7 @@ class Doer:
     def init(self, engine: "Engine") -> None:
         pass
 
-    def do(self, cmd: "Command") -> None:
+    async def do(self, cmd: "Command") -> None:
         pass
 
     def __enter__(self):

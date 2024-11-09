@@ -8,12 +8,16 @@ from cmd_end import end
 from cmd_transit import transit
 
 
-def test_single_node():
+import pytest
+
+
+@pytest.mark.asyncio
+async def test_single_node():
     driver = Driver()
     flow_registry = driver.flow_registry
     tracker = Tracker()
 
-    def first(state_ctx: StateCtx, _: Engine) -> Command:
+    async def first(state_ctx: StateCtx, _: Engine) -> Command:
         track(state_ctx, tracker)
         return end(state_ctx)
 
@@ -21,7 +25,7 @@ def test_single_node():
 
     with Engine(driver) as e:
         state_ctx = StateCtx(current=State(id="aTID", rev=0))
-        e.do(transit(state_ctx, "first"))
-        e.execute(state_ctx)
+        await e.do(transit(state_ctx, "first"))
+        await e.execute(state_ctx)
 
     assert tracker.visited == ["first"]

@@ -12,7 +12,7 @@ class Commiter(Doer):
         self.l: Log = l
         self.e: Engine = None
 
-    def do(self, cmd: Command):
+    async def do(self, cmd: Command):
         if isinstance(cmd, CommitStateCtxCommand):
             return
 

@@ -29,7 +29,7 @@ class Engine:
         except Exception as e:
             raise Exception("driver init") from e
 
-    def execute(self, state_ctx: StateCtx):
+    async def execute(self, state_ctx: StateCtx):
         state_ctx.e = self
 
         if state_ctx.current.id == "":
@@ -45,7 +45,7 @@ class Engine:
                 if isinstance(cmd, ExecuteCommand):
                     cmd.sync = True
 
-                self.do(cmd)
+                await self.do(cmd)
             except ErrCommitConflict as e:
                 logging.info(f"engine: execute: {e}\n")
                 return
@@ -62,29 +62,29 @@ class Engine:
 
             return
 
-    def do(self, *cmds: Command) -> None:
+    async def do(self, *cmds: Command) -> None:
         if len(cmds) == 0:
             raise Exception("no commands to do")
 
         for cmd in cmds:
             try:
-                self.__do(cmd)
+                await self.__do(cmd)
             except Exception as e:
                 raise e
 
-    def __do(self, cmd: Command) -> None:
+    async def __do(self, cmd: Command) -> None:
         if isinstance(cmd, ExecuteCommand):
             if cmd.sync:
                 return
 
             try:
-                self.execute(cmd.state_ctx)
+                await self.execute(cmd.state_ctx)
             except Exception as e:
                 raise e
 
         else:
             try:
-                return self.d.do(cmd)
+                return await self.d.do(cmd)
             except Exception as e:
                 raise e
 

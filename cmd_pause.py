@@ -31,7 +31,7 @@ class DefaultPauseDoer(Doer):
     state_ctx: StateCtx
     flow_id: FlowId
 
-    def do(self, cmd: Command) -> Exception:
+    async def do(self, cmd: Command) -> Exception:
         if not isinstance(cmd, PauseCommand):
             raise ErrCommandNotSupported
 

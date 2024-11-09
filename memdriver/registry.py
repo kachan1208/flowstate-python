@@ -26,7 +26,7 @@ class FlowGetter(Doer):
     def __init__(self, flow_registry: FlowRegistry):
         self.flow_registry = flow_registry
 
-    def do(self, cmd: Command) -> None:
+    async def do(self, cmd: Command) -> None:
         if not isinstance(cmd, GetFlowCommand):
             raise ErrCommandNotSupported
 

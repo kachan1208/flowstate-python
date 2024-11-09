@@ -22,7 +22,7 @@ class SerializeCommand(Command):
 
 
 class DefaultSerializerDoer(Doer):
-    def do(self, cmd: Command):
+    async def do(self, cmd: Command):
         if not isinstance(cmd, SerializeCommand):
             raise ErrCommandNotSupported
 

@@ -1,14 +1,18 @@
+from typing import Any, Callable, Coroutine
+
 FlowId = str
 
 
 class Flow:
-    def execute(self, state_ctx: "StateCtx", e: "Engine") -> "Command":
+    async def execute(self, state_ctx: "StateCtx", e: "Engine") -> "Command":
         pass
 
 
 class FlowFunc(Flow):
-    def __init__(self, func):
+    def __init__(
+        self, func: Callable[["StateCtx", "Engine"], Coroutine[Any, Any, "Command"]]
+    ):
         self.func = func
 
-    def execute(self, state_ctx: "StateCtx", e: "Engine") -> "Command":
+    async def execute(self, state_ctx: "StateCtx", e: "Engine") -> "Command":
         return self.func(state_ctx, e)

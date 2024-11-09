@@ -17,13 +17,17 @@ import croniter
 import time
 
 
-def test_cron():
+import pytest
+
+
+@pytest.mark.asyncio
+async def test_cron():
     driver = Driver()
     flow_registry = driver.flow_registry
 
     tracker = Tracker()
 
-    def cron_flow(cron_state_ctx: StateCtx, e: Engine) -> "Command":
+    async def cron_flow(cron_state_ctx: StateCtx, e: Engine) -> "Command":
         track(cron_state_ctx, tracker)
 
         now = round(time.time())
@@ -43,7 +47,7 @@ def test_cron():
             return commit(end(cron_state_ctx))
 
         next_times = [cron.next(start_time=now), cron.next(start_time=now + 1)]
-        if next_times[0] > now and next_times[0] <= now + 1:
+        if now < next_times[0] <= now + 1:
             task_state_ctx = StateCtx(
                 current=State(
                     id=f"task_{int(next_times[0])}",
@@ -55,7 +59,7 @@ def test_cron():
             )
 
             try:
-                e.do(
+                await e.do(
                     commit(
                         pause(cron_state_ctx),
                         delay(cron_state_ctx, next_times[1] - now),
@@ -68,7 +72,7 @@ def test_cron():
             return noop(cron_state_ctx)
 
         try:
-            e.do(
+            await e.do(
                 commit(
                     pause(cron_state_ctx),
                     delay(cron_state_ctx, next_times[0] - time.time()),
@@ -81,7 +85,7 @@ def test_cron():
 
     flow_registry.set_flow("cron", FlowFunc(cron_flow))
 
-    def task(state_ctx: StateCtx, _: Engine) -> "Command":
+    async def task(state_ctx: StateCtx, _: Engine) -> "Command":
         track(state_ctx, tracker)
 
         return commit(end(state_ctx))
@@ -99,7 +103,7 @@ def test_cron():
             ),
         )
 
-        e.do(commit(transit(state_ctx, "cron")))
-        e.execute(state_ctx)
+        await e.do(commit(transit(state_ctx, "cron")))
+        await e.execute(state_ctx)
 
     assert tracker.visited == ["cron", "task", "cron", "task", "cron", "task"]

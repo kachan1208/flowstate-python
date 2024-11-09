@@ -23,7 +23,7 @@ class ResumeCommand(Command):
 
 
 class DefaultResumeDoer(Doer):
-    def do(self, cmd: Command) -> None:
+    async def do(self, cmd: Command) -> None:
         if not isinstance(cmd, ResumeCommand):
             raise ErrCommandNotSupported
 

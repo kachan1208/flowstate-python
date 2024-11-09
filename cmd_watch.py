@@ -16,7 +16,7 @@ def watch(labels: dict[str, str] = None) -> "WatchCommand":
 
 
 def do_watch(e: "Engine", cmd: "WatchCommand") -> "WatchListener":
-    e.do(cmd)
+    await e.do(cmd)
 
     return cmd.listener
 

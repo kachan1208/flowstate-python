@@ -18,14 +18,18 @@ from cmd_end import end
 from flow import FlowFunc
 
 
-def test_call_flow_with_commit():
+import pytest
+
+
+@pytest.mark.asyncio
+async def test_call_flow_with_commit():
     tracker = Tracker()
     close_event = asyncio.Event()
 
     driver = Driver()
     flow_registry = driver.flow_registry
 
-    def call(state_ctx: StateCtx, e: Engine) -> "Command":
+    async def call(state_ctx: StateCtx, e: Engine) -> "Command":
         track(state_ctx, tracker)
 
         if resumed(state_ctx.current):
@@ -33,7 +37,7 @@ def test_call_flow_with_commit():
 
         next_state_ctx = StateCtx(current=State(id="aNextTID"))
 
-        e.do(
+        await e.do(
             commit(
                 pause(state_ctx),
                 serialize(state_ctx, next_state_ctx, "caller_state"),
@@ -46,10 +50,10 @@ def test_call_flow_with_commit():
 
     flow_registry.set_flow("call", FlowFunc(call))
 
-    def called(state_ctx: StateCtx, e: Engine) -> "Command":
+    async def called(state_ctx: StateCtx, e: Engine) -> "Command":
         track(state_ctx, tracker)
 
-        e.do(
+        await e.do(
             transit(state_ctx, "called_end"),
             execute(state_ctx),
         )
@@ -57,12 +61,12 @@ def test_call_flow_with_commit():
 
     flow_registry.set_flow("called", FlowFunc(called))
 
-    def called_end(state_ctx: StateCtx, e: Engine) -> "Command":
+    async def called_end(state_ctx: StateCtx, e: Engine) -> "Command":
         track(state_ctx, tracker)
 
         if state_ctx.current.annotations["caller_state"] != "":
             call_state_ctx = StateCtx()
-            e.do(
+            await e.do(
                 commit(
                     deserialize(state_ctx, call_state_ctx, "caller_state"),
                     resume(call_state_ctx),
@@ -77,7 +81,7 @@ def test_call_flow_with_commit():
 
     flow_registry.set_flow("called_end", FlowFunc(called_end))
 
-    def call_end(state_ctx: StateCtx, _: Engine) -> "Command":
+    async def call_end(state_ctx: StateCtx, _: Engine) -> "Command":
         track(state_ctx, tracker)
 
         close_event.set()
@@ -89,9 +93,9 @@ def test_call_flow_with_commit():
     with Engine(driver) as e:
         state_ctx = StateCtx(current=State(id="aTID"))
 
-        e.do(transit(state_ctx, "call"))
-        e.execute(state_ctx)
+        await e.do(transit(state_ctx, "call"))
+        await e.execute(state_ctx)
 
-        close_event.wait()
+        await close_event.wait()
 
     assert tracker.visited == ["call", "called", "called_end", "call", "call_end"]

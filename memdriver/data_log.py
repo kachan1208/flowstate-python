@@ -10,7 +10,7 @@ class DataLog(Doer):
         self.entries = []
         self.rev = 0
 
-    def do(self, cmd: Command):
+    async def do(self, cmd: Command):
         typ = type(cmd)
         if typ is StoreDataCommand:
             return self._do_store(cmd)

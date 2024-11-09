@@ -14,13 +14,17 @@ from cmd_execute import execute
 from flow import FlowFunc
 
 
-def test_data_store_get():
+import pytest
+
+
+@pytest.mark.asyncio
+async def test_data_store_get():
     tracker = Tracker()
 
     driver = Driver()
     flow_registry = driver.flow_registry
 
-    def store(state_ctx: StateCtx, e: Engine) -> "Command":
+    async def store(state_ctx: StateCtx, e: Engine) -> "Command":
         track(state_ctx, tracker)
 
         d = Data(
@@ -28,7 +32,7 @@ def test_data_store_get():
             b=bytearray(b"foo"),
         )
 
-        e.do(
+        await e.do(
             store_data(d),
             reference_data(
                 state_ctx=state_ctx,
@@ -44,10 +48,10 @@ def test_data_store_get():
 
     act_data = Data()
 
-    def get(state_ctx: StateCtx, e: Engine) -> "Command":
+    async def get(state_ctx: StateCtx, e: Engine) -> "Command":
         track(state_ctx, tracker)
 
-        e.do(
+        await e.do(
             dereference_data(
                 state_ctx=state_ctx,
                 data=act_data,
@@ -61,7 +65,7 @@ def test_data_store_get():
 
     flow_registry.set_flow("get", FlowFunc(get))
 
-    def finish(state_ctx: StateCtx, _: Engine) -> Command:
+    async def finish(state_ctx: StateCtx, _: Engine) -> Command:
         track(state_ctx, tracker)
 
         return end(state_ctx)
@@ -76,8 +80,8 @@ def test_data_store_get():
 
     ctx = StateCtx(current=State(id="aTID"))
     with Engine(driver) as e:
-        e.do(transit(ctx, "store"))
-        e.do(execute(ctx))
+        await e.do(transit(ctx, "store"))
+        await e.do(execute(ctx))
 
         assert exp_data.id == act_data.id
         assert exp_data.rev == act_data.rev

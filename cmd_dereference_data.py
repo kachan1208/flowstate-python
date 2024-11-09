@@ -18,7 +18,7 @@ class DereferenceDataCommand(Command):
 
 
 class DefaultDereferenceDataDoer(Doer):
-    def do(self, cmd: Command):
+    async def do(self, cmd: Command):
         if not isinstance(cmd, DereferenceDataCommand):
             raise ErrCommandNotSupported
 

@@ -8,7 +8,7 @@ class Getter(Doer):
     def __init__(self, log: Log):
         self.l = log
 
-    def do(self, cmd: Command):
+    async def do(self, cmd: Command):
         if not isinstance(cmd, GetCommand):
             return ErrCommandNotSupported
 

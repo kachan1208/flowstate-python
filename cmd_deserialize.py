@@ -22,7 +22,7 @@ class DeserializeCommand(Command):
 
 
 class DefaultDeserializeDoer(Doer):
-    def do(self, cmd: Command):
+    async def do(self, cmd: Command):
         if not isinstance(cmd, DeserializeCommand):
             raise ErrCommandNotSupported
 
