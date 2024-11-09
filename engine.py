@@ -40,8 +40,8 @@ class Engine:
                 raise Exception("transition to id is empty")
 
             try:
-                f = self.get_flow(state_ctx)
-                cmd = f.execute(state_ctx, self)
+                f = await self.get_flow(state_ctx)
+                cmd = await f.execute(state_ctx, self)
                 if isinstance(cmd, ExecuteCommand):
                     cmd.sync = True
 
@@ -88,10 +88,10 @@ class Engine:
             except Exception as e:
                 raise e
 
-    def get_flow(self, state_ctx: StateCtx) -> Flow:
+    async def get_flow(self, state_ctx: StateCtx) -> Flow:
         cmd = get_flow(state_ctx)
         try:
-            self.d.do(cmd)
+            await self.d.do(cmd)
         except Exception as e:
             raise e
 

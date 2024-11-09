@@ -6,8 +6,6 @@ from engine import Engine
 from testcases.tracker import track, Tracker
 from cmd_end import end
 from cmd_transit import transit
-
-
 import pytest
 
 
