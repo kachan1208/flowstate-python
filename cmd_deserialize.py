@@ -26,17 +26,18 @@ class DefaultDeserializeDoer(Doer):
         if not isinstance(cmd, DeserializeCommand):
             raise ErrCommandNotSupported
 
-        serializedState = cmd.state_ctx.current.annotations.get(cmd.annotation)
-        if serializedState is None or serializedState is "":
+        serialized_state = cmd.state_ctx.current.annotations.get(cmd.annotation)
+        if serialized_state is None or serialized_state is "":
             raise Exception("store annotation value empty")
 
         try:
-            b = base64.standard_b64decode(serializedState)
+            b = base64.standard_b64decode(serialized_state)
         except Exception as e:
             raise e("base64 decode")
 
         try:
-            cmd.deserialized_ctx = json.loads(b)
+            data = json.loads(b)
+            cmd.deserialized_ctx.from_dict(data)
         except Exception as e:
             raise e("json load")
 

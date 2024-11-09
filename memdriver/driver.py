@@ -3,6 +3,7 @@ from contextlib import ExitStack
 from command import Command
 from engine import Engine
 from memdriver.data_log import DataLog
+from memdriver.delayer import Delayer
 from memdriver.getter import Getter
 from memdriver.registry import FlowRegistry, FlowGetter
 from memdriver.log import Log
@@ -42,6 +43,7 @@ class Driver(Doer):
             FlowGetter(self.flow_registry),
             Commiter(self.l),
             Getter(self.l),
+            Delayer(),
         ]
 
     def do(self, cmd: Command):
