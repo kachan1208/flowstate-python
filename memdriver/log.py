@@ -80,10 +80,14 @@ class Log:
             if e.commited.id == id:
                 return e.copy_to(StateCtx()), e.commited.rev
 
+        return None, 0
+
     def get_by_id_and_rev(self, id: DataId, rev: int) -> "StateCtx":
         for e in self.entries:
             if e.commited.id == id and e.commited.rev == rev:
                 return e.copy_to(StateCtx())
+
+        return None
 
     def get_latest_by_labels(self, labels: list[dict[str, str]]) -> ("StateCtx", int):
         for e in reversed(self.entries):

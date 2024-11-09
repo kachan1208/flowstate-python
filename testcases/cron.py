@@ -1,3 +1,4 @@
+from datetime import datetime
 from idlelib.pyparse import trans
 
 from flow import FlowFunc
@@ -25,6 +26,7 @@ def test_cron():
     def cron_flow(cron_state_ctx: StateCtx, e: Engine) -> "Command":
         track(cron_state_ctx, tracker)
 
+        now = round(time.time())
         try:
             cron = croniter.croniter(cron_state_ctx.current.annotations["cron"])
         except Exception as e:
@@ -40,8 +42,8 @@ def test_cron():
             cron_state_ctx.current.set_annotation("error", "task flow id is empty")
             return commit(end(cron_state_ctx))
 
-        next_times = [cron.get_next() for i in range(3)]
-        if time.time() < next_times[0] < time.time() + 1:
+        next_times = [cron.next(start_time=now), cron.next(start_time=now + 1)]
+        if next_times[0] > now and next_times[0] <= now + 1:
             task_state_ctx = StateCtx(
                 current=State(
                     id=f"task_{int(next_times[0])}",
@@ -56,7 +58,7 @@ def test_cron():
                 e.do(
                     commit(
                         pause(cron_state_ctx),
-                        delay(cron_state_ctx, next_times[1] - time.time()),
+                        delay(cron_state_ctx, next_times[1] - now),
                         transit(task_state_ctx, task_flow_id),
                     ),
                 )
@@ -91,7 +93,7 @@ def test_cron():
             current=State(
                 id="cron",
                 annotations={
-                    "cron": "* * * * *",
+                    "cron": "* * * * * * *",
                     "task": "task",
                 },
             ),

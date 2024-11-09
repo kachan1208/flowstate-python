@@ -42,7 +42,7 @@ class Commiter(Doer):
                 if state_ctx.current.id == "":
                     raise Exception("state id is empty")
 
-                s, rev = self.l.get_latest_by_id(state_ctx.current.id)
+                _, rev = self.l.get_latest_by_id(state_ctx.current.id)
                 if rev != state_ctx.commited.rev:
                     raise ErrCommitConflict
 
