@@ -1,3 +1,4 @@
+import asyncio
 import json
 from transition import Transition
 from datetime import datetime
@@ -146,9 +147,11 @@ class StateCtx:
     def deadline(self) -> tuple[datetime, bool]:
         return datetime.now(), False
 
-    # TODO: implement me
-    def done(self) -> bool:
-        return False
+    def done(self) -> asyncio.Event | None:
+        if self.e is None:
+            return None
+
+        return self.e.done
 
     # TODO: implement me
     def err(self) -> Exception:

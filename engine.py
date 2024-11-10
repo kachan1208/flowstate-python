@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from contextlib import ExitStack
 
@@ -22,7 +23,8 @@ ErrFlowNotFound = Exception("flow not found")
 
 class Engine:
     def __init__(self, doer: Doer):
-        self.d = doer
+        self.d: Doer = doer
+        self.done: asyncio.Event = asyncio.Event()
 
         try:
             doer.init(self)
@@ -35,7 +37,7 @@ class Engine:
         if state_ctx.current.id == "":
             raise Exception("state id is empty")
 
-        while not state_ctx.done():
+        while not self.done.is_set():
             if state_ctx.current.transition.to_id == "":
                 raise Exception("transition to id is empty")
 
@@ -128,4 +130,5 @@ class Engine:
         return self
 
     def __exit__(self, typ, value, traceback):
+        self.done.set()
         self._stack.__exit__(typ, value, traceback)
