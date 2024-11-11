@@ -1,10 +1,11 @@
 from typing import Any, Callable, Coroutine
+from command import Command
 
 FlowId = str
 
 
 class Flow:
-    async def execute(self, state_ctx: "StateCtx", e: "Engine") -> "Command":
+    async def execute(self, state_ctx: "StateCtx", e: "Engine") -> Command:
         pass
 
 
