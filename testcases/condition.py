@@ -7,12 +7,16 @@ from engine import Engine
 from cmd_end import end
 
 
-def test_condition():
+import pytest
+
+
+@pytest.mark.asyncio
+async def test_condition():
     driver = Driver()
     tracker = Tracker()
     flow_registry = driver.flow_registry
 
-    def first(state_ctx: StateCtx, _: Engine):
+    async def first(state_ctx: StateCtx, _: Engine):
         track(state_ctx, tracker)
 
         bID = FlowId("third")
@@ -26,7 +30,7 @@ def test_condition():
         FlowFunc(first),
     )
 
-    def second(state_ctx: StateCtx, _: Engine):
+    async def second(state_ctx: StateCtx, _: Engine):
         track(state_ctx, tracker)
 
         return end(state_ctx)
@@ -36,7 +40,7 @@ def test_condition():
         FlowFunc(second),
     )
 
-    def third(state_ctx: StateCtx, _: Engine):
+    async def third(state_ctx: StateCtx, _: Engine):
         track(state_ctx, tracker)
 
         return end(state_ctx)
@@ -53,8 +57,8 @@ def test_condition():
                 annotations={"condition": "True"},
             ),
         )
-        e.do(transit(state_ctx_true, "first"))
-        e.execute(state_ctx_true)
+        await e.do(transit(state_ctx_true, "first"))
+        await e.execute(state_ctx_true)
 
         assert tracker.visited == ["first", "second"]
 
@@ -64,7 +68,7 @@ def test_condition():
                 annotations={"condition": "False"},
             ),
         )
-        e.do(transit(state_ctx_false, "first"))
-        e.execute(state_ctx_false)
+        await e.do(transit(state_ctx_false, "first"))
+        await e.execute(state_ctx_false)
 
         assert tracker.visited == ["first", "second", "first", "third"]

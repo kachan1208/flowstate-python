@@ -20,7 +20,7 @@ class TransitCommand(Command, CommittableCommand):
 
 
 class DefaultTransitDoer(Doer):
-    def do(self, cmd: Command):
+    async def do(self, cmd: Command):
         if not isinstance(cmd, TransitCommand):
             raise ErrCommandNotSupported
 

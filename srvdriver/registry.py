@@ -12,7 +12,7 @@ class FlowRegistry(Doer):
     def __init__(self, flows: dict[FlowId, Flow]):
         self.flows = flows
 
-    def do(self, cmd: Command) -> None:
+    async def do(self, cmd: Command) -> None:
         if not isinstance(cmd, GetFlowCommand):
             raise ErrCommandNotSupported
 

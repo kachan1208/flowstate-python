@@ -14,7 +14,7 @@ class EndCommand(Command, CommittableCommand):
 
 
 class DefaultEndDoer(Doer):
-    def do(self, cmd: Command) -> None:
+    async def do(self, cmd: Command) -> None:
         if not isinstance(cmd, EndCommand):
             raise ErrCommandNotSupported
 

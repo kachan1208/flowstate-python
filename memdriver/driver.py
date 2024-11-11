@@ -46,10 +46,10 @@ class Driver(Doer):
             Delayer(),
         ]
 
-    def do(self, cmd: Command):
+    async def do(self, cmd: Command):
         for doer in self.doers:
             try:
-                doer.do(cmd)
+                await doer.do(cmd)
             except ErrCommandNotSupported as e:
                 continue
             except Exception as e:

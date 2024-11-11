@@ -22,7 +22,7 @@ class ReferenceDataCommand(Command):
 
 
 class DefaultReferenceDataDoer(Doer):
-    def do(self, cmd: Command):
+    async def do(self, cmd: Command):
         if not isinstance(cmd, ReferenceDataCommand):
             raise ErrCommandNotSupported
 

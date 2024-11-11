@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from contextlib import ExitStack
 
@@ -22,30 +23,31 @@ ErrFlowNotFound = Exception("flow not found")
 
 class Engine:
     def __init__(self, doer: Doer):
-        self.d = doer
+        self.d: Doer = doer
+        self.done: asyncio.Event = asyncio.Event()
 
         try:
             doer.init(self)
         except Exception as e:
             raise Exception("driver init") from e
 
-    def execute(self, state_ctx: StateCtx):
+    async def execute(self, state_ctx: StateCtx):
         state_ctx.e = self
 
         if state_ctx.current.id == "":
             raise Exception("state id is empty")
 
-        while not state_ctx.done():
+        while not self.done.is_set():
             if state_ctx.current.transition.to_id == "":
                 raise Exception("transition to id is empty")
 
             try:
-                f = self.get_flow(state_ctx)
-                cmd = f.execute(state_ctx, self)
+                f = await self.get_flow(state_ctx)
+                cmd = await f.execute(state_ctx, self)
                 if isinstance(cmd, ExecuteCommand):
                     cmd.sync = True
 
-                self.do(cmd)
+                await self.do(cmd)
             except ErrCommitConflict as e:
                 logging.info(f"engine: execute: {e}\n")
                 return
@@ -62,36 +64,39 @@ class Engine:
 
             return
 
-    def do(self, *cmds: Command) -> None:
+    async def do(self, *cmds: Command) -> None:
         if len(cmds) == 0:
             raise Exception("no commands to do")
 
         for cmd in cmds:
             try:
-                self.__do(cmd)
+                await self.__do(cmd)
             except Exception as e:
                 raise e
 
-    def __do(self, cmd: Command) -> None:
+    async def __do(self, cmd: Command) -> None:
         if isinstance(cmd, ExecuteCommand):
             if cmd.sync:
                 return
 
-            try:
-                self.execute(cmd.state_ctx)
-            except Exception as e:
-                raise e
+            async def exec():
+                try:
+                    await self.execute(cmd.state_ctx)
+                except Exception as e:
+                    logging.error(f"engine: go execute: {e}\n")
+
+            asyncio.create_task(exec())
 
         else:
             try:
-                return self.d.do(cmd)
+                return await self.d.do(cmd)
             except Exception as e:
                 raise e
 
-    def get_flow(self, state_ctx: StateCtx) -> Flow:
+    async def get_flow(self, state_ctx: StateCtx) -> Flow:
         cmd = get_flow(state_ctx)
         try:
-            self.d.do(cmd)
+            await self.d.do(cmd)
         except Exception as e:
             raise e
 
@@ -128,4 +133,5 @@ class Engine:
         return self
 
     def __exit__(self, typ, value, traceback):
+        self.done.set()
         self._stack.__exit__(typ, value, traceback)
