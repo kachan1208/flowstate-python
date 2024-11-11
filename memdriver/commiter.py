@@ -31,7 +31,7 @@ class Commiter(Doer):
                     raise Exception("execute command not allowed inside commit")
 
                 try:
-                    self.e.d.do(c)
+                    await self.e.d.do(c)
                 except Exception as e:
                     raise e
 

@@ -10,10 +10,8 @@ class Flow:
 
 
 class FlowFunc(Flow):
-    def __init__(
-        self, func: Callable[["StateCtx", "Engine"], Coroutine[Any, Any, "Command"]]
-    ):
+    def __init__(self, func):
         self.func = func
 
     async def execute(self, state_ctx: "StateCtx", e: "Engine") -> "Command":
-        return self.func(state_ctx, e)
+        return await self.func(state_ctx, e)

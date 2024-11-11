@@ -79,10 +79,13 @@ class Engine:
             if cmd.sync:
                 return
 
-            try:
-                await self.execute(cmd.state_ctx)
-            except Exception as e:
-                raise e
+            async def exec():
+                try:
+                    await self.execute(cmd.state_ctx)
+                except Exception as e:
+                    logging.error(f"engine: go execute: {e}\n")
+
+            asyncio.create_task(exec())
 
         else:
             try:
