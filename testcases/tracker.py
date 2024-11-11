@@ -2,6 +2,7 @@ import time
 from cmd_resume import resumed
 from state import StateCtx
 from cmd_pause import paused
+import asyncio
 
 
 def track(state_ctx: StateCtx, trkr: "Tracker"):
@@ -24,7 +25,7 @@ class Tracker:
         self.include_state = include_state
         self.visited: list[str] = []
 
-    def visited(self) -> list[str]:
+    def get_visited(self) -> list[str]:
         return self.visited[:]
 
     def visited_sorted(self) -> list[str]:
@@ -44,33 +45,33 @@ class Tracker:
 
         assert_eventually(func=condition, timeout=wait, interval=0.05)
 
-        assert exp_visited == visited
-        return visited
+        assert exp_visited == self.visited
+        return self.visited
 
-    def wait_visited_equal(
+    async def wait_visited_equal(
         self,
-        expVisited: list[str],
+        exp_visited: list[str],
         wait: int,
     ) -> list[str]:
-        visited: list[str]
+        visited: list[str] = []
 
         def condition():
             nonlocal visited
-            visited = self.visited()
-            return visited == expVisited
+            visited = self.visited[:]
+            return visited == exp_visited
 
-        assert_eventually(func=condition, timeout=wait, interval=0.05)
+        await assert_eventually(func=condition, timeout=wait, interval=0.05)
 
-        assert expVisited == visited
+        assert exp_visited == visited
         return visited
 
 
-def assert_eventually(func, timeout=1, interval=0.1):
-    start_time = time.time()
-    while time.time() - start_time < timeout:
+async def assert_eventually(func, timeout=1, interval=0.1):
+    end_time = time.time() + timeout
+    while end_time > time.time():
         if func():
             return
 
-        time.sleep(interval)
+        await asyncio.sleep(interval)
 
     raise AssertionError("condition not met within timeout")

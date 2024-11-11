@@ -14,27 +14,22 @@ def delayed(state: State) -> bool:
     return state.transition.annotations[DelayAtAnnotation] != ""
 
 
-def delay(state_ctx: StateCtx, dur: timedelta) -> "DelayCommand":
+def delay(state_ctx: StateCtx, dur: float) -> "DelayCommand":
     return DelayCommand(state_ctx=state_ctx, duration=dur)
 
 
 class DelayCommand(Command):
-    state_ctx: StateCtx
-    delay_state_ctx: StateCtx
-    duration: timedelta
-    commit: bool
-
     def __init__(
         self,
         state_ctx: StateCtx = None,
         delay_state_ctx: StateCtx = None,
-        duration: timedelta = None,
+        duration: float = 0,
         commit: bool = False,
     ):
-        self.state_ctx = state_ctx
-        self.delay_state_ctx = delay_state_ctx
-        self.duration = duration
-        self.commit = commit
+        self.state_ctx: StateCtx = state_ctx
+        self.delay_state_ctx: StateCtx = delay_state_ctx
+        self.duration: float = duration
+        self.commit: bool = commit
 
     def with_commit(self, commit: bool) -> "DelayCommand":
         self.commit = commit

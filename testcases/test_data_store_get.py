@@ -83,8 +83,7 @@ async def test_data_store_get():
         await e.do(transit(ctx, "store"))
         await e.do(execute(ctx))
 
+        await tracker.wait_visited_equal(["store", "get", "finish"], 2)
         assert exp_data.id == act_data.id
         assert exp_data.rev == act_data.rev
         assert exp_data.b == act_data.b
-
-        assert tracker.visited == ["store", "get", "finish"]

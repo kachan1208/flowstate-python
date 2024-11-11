@@ -106,4 +106,6 @@ async def test_cron():
         await e.do(commit(transit(state_ctx, "cron")))
         await e.execute(state_ctx)
 
-    assert tracker.visited == ["cron", "task", "cron", "task", "cron", "task"]
+    await tracker.wait_visited_equal(
+        ["cron", "task", "cron", "task", "cron", "task", "task"], 10
+    )

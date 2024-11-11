@@ -18,18 +18,21 @@ class Delayer(Doer):
         if not isinstance(cmd, DelayCommand):
             raise ErrCommandNotSupported
 
+        asyncio.create_task(self.__do(cmd))
+
+    async def __do(self, cmd: DelayCommand):
         try:
             cmd.prepare()
             ticks, ticks_stop = ticker(cmd.duration)
             while await ticks.get():
                 if (
-                    cmd.delayed_state_ctx.current.transition.annotations[
+                    cmd.delay_state_ctx.current.transition.annotations[
                         DelayCommitAnnotation
                     ]
                     == "True"
                 ):
-                    self.e.do(commit(commit_state_ctx(cmd.delay_state_ctx)))
-                    self.e.execute(cmd.delay_state_ctx)
+                    await self.e.do(commit(commit_state_ctx(cmd.delay_state_ctx)))
+                    await self.e.execute(cmd.delay_state_ctx)
 
             ticks_stop.set()
         except Exception as e:
